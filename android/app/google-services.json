@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "236181524844",
+    "project_id": "retroflux-cf1ae",
+    "storage_bucket": "retroflux-cf1ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236181524844:android:4675e3a62ef3d6433ea349",
+        "android_client_info": {
+          "package_name": "com.retroflux.retroflux"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236181524844-eomj5q3hg8omrb8qfui4v7pv5o0pfi3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-qUWUgElKigMG-5jnqaePgeRs9gVWLoI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236181524844-eomj5q3hg8omrb8qfui4v7pv5o0pfi3e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "236181524844-ohikheej5uofsbk6bvlr34puebfqfjjc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.retroflux.retroflux"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
