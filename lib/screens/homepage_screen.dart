@@ -1,3 +1,4 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:retroflux/screens/addpage_screen.dart';
 import 'package:retroflux/screens/chatbot_screen.dart';
@@ -30,37 +31,33 @@ class _HomePageScreenState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _bottomNavBarTabs.elementAt(_bottomNavBarIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _bottomNavBarIndex,
-        iconSize: 42.0,
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
+      bottomNavigationBar: ConvexAppBar(
+        initialActiveIndex: _bottomNavBarIndex,
+        activeColor: Colors.white,
+        style: TabStyle.fixedCircle,
+        items: const <TabItem>[
+          TabItem(
+            icon: Icon(Icons.star,color: Colors.white,),
             //Todo: New name for Scroller Screen
-            label: 'Scroller',
+            title: 'Scroller',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Notehub',
+          TabItem(
+            icon: Icon(Icons.star,color: Colors.white,),
+            title: 'Notehub',
           ),
-          BottomNavigationBarItem(
-            //Todo: Customize add button
-            icon: Icon(Icons.add_circle_outlined,size: 60,),
-            label:"",
-            backgroundColor: Colors.amberAccent
+          TabItem(
+            icon: Icon(Icons.add,size:40,color: Colors.white,),
+            title: 'Add',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Chat Bot',
+          TabItem(
+            icon: Icon(Icons.star,color: Colors.white,),
+            title: 'ChatBot',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Profile',
+          TabItem(
+            icon: Icon(Icons.star,color: Colors.white,),
+            title: 'Profile',
           ),
         ],
-        selectedItemColor: selectedIconColor,
-        unselectedItemColor: unSelectedIconColor,
         onTap: (index){
           setState(() {
             _bottomNavBarIndex = index;
@@ -70,3 +67,4 @@ class _HomePageScreenState extends State<HomePageScreen> {
     );
   }
 }
+
