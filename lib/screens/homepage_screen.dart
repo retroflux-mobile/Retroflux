@@ -68,7 +68,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.bug_report),
         onPressed: () {
-          Navigator.pushReplacement(
+          Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const TestsScreen()));
         },
