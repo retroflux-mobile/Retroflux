@@ -26,6 +26,9 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+dependency_overrides:
+  quiver: ^3.0.0
+
 dependencies:
   flutter:
     sdk: flutter
@@ -36,9 +39,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   dependencies:
   convex_bottom_bar: ^3.0.0
-  #firebase_auth: ^3.3.20
-  #firebase_core: ^1.18.0
-  #flutterfire_ui: ^0.4.2
+  firebase_auth: ^3.3.20
+  firebase_core: ^1.18.0
+  flutterfire_ui: ^0.4.2
 
 dev_dependencies:
   flutter_test:
