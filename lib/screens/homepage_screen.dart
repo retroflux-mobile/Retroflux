@@ -5,6 +5,7 @@ import 'package:retroflux/screens/chatbot_screen.dart';
 import 'package:retroflux/screens/notehub_screen.dart';
 import 'package:retroflux/screens/profile_screen.dart';
 import 'package:retroflux/screens/scroller_screen.dart';
+import 'package:retroflux/tests/tests_screen.dart';
 
 import '../style_guide.dart';
 
@@ -62,6 +63,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
           setState(() {
             _bottomNavBarIndex = index;
           });
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.bug_report),
+        onPressed: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const TestsScreen()));
         },
       ),
     );

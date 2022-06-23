@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterfire_ui/auth.dart';
+import 'package:retroflux/firebase_options.dart';
+import 'package:retroflux/screens/homepage_screen.dart';
 import 'package:retroflux/screens/login_screen.dart';
 import 'package:retroflux/style_guide.dart';
 
@@ -7,34 +11,35 @@ class LoginMethodScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("RetroFlux",style: testLargeFont,),
-            SizedBox(
-              height: MediaQuery.of(context).size.height/3,
-            ),
-            TextButton(
-                onPressed: (){
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()));
-                },
-                child: const Text("Log in with Google Account")
-            ),
-            TextButton(
-                onPressed: (){},
-                child: const Text("Log in with XX")
-            ),
-            TextButton(
-                onPressed: (){},
-                child: const Text("Log in with XX")
-            )
-          ],
-        ),
-      ),
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      // If the user is already signed-in, use it as initial data
+      initialData: FirebaseAuth.instance.currentUser,
+      builder: (context, snapshot) {
+        // User is not signed in
+        if (!snapshot.hasData) {
+          return SignInScreen(
+            headerBuilder: (context, constraints, shrinkOffset) {
+              return Padding(
+                padding: const EdgeInsets.all(20).copyWith(top: 40),
+                child: Icon(
+                  Icons.sentiment_very_satisfied,
+                  color: Colors.blue,
+                  size: constraints.maxWidth / 4 * (1 - shrinkOffset),
+                ),
+              );
+            },
+              providerConfigs: const [
+                EmailProviderConfiguration(),
+                GoogleProviderConfiguration(
+                  clientId: GOOGLEWEBID,
+                ),
+              ]
+          );
+        }
+        // Render your application if authenticated
+        return const HomePageScreen();
+      },
     );
   }
 }
