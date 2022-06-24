@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:retroflux/firebase_options.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
-import 'package:retroflux/screens/login_screen.dart';
-import 'package:retroflux/style_guide.dart';
 
 class LoginMethodScreen extends StatelessWidget {
   const LoginMethodScreen({Key? key}) : super(key: key);
@@ -32,7 +30,7 @@ class LoginMethodScreen extends StatelessWidget {
               providerConfigs: const [
                 EmailProviderConfiguration(),
                 GoogleProviderConfiguration(
-                  clientId: googleWebID,
+                  clientId: googleWbeID,
                 ),
               ]
           );
