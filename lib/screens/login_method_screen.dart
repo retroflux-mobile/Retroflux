@@ -5,6 +5,8 @@ import 'package:retroflux/firebase_options.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
 
 class LoginMethodScreen extends StatelessWidget {
+  static const String routeName = '/login_method';
+
   const LoginMethodScreen({Key? key}) : super(key: key);
 
   @override
@@ -17,28 +19,25 @@ class LoginMethodScreen extends StatelessWidget {
         // User is not signed in
         if (!snapshot.hasData) {
           return SignInScreen(
-            headerBuilder: (context, constraints, shrinkOffset) {
-              return Padding(
-                padding: const EdgeInsets.all(20).copyWith(top: 40),
-                child: Icon(
-                  Icons.sentiment_very_satisfied,
-                  color: Colors.blue,
-                  size: constraints.maxWidth / 4 * (1 - shrinkOffset),
-                ),
-              );
-            },
+              headerBuilder: (context, constraints, shrinkOffset) {
+                return Padding(
+                  padding: const EdgeInsets.all(20).copyWith(top: 40),
+                  child: Icon(
+                    Icons.sentiment_very_satisfied,
+                    color: Colors.blue,
+                    size: constraints.maxWidth / 4 * (1 - shrinkOffset),
+                  ),
+                );
+              },
               providerConfigs: const [
                 EmailProviderConfiguration(),
                 GoogleProviderConfiguration(
                   clientId: googleWebID,
                 ),
-              ]
-          );
-        }else{
-          return const HomePageScreen();
+              ]);
         }
         // Render your application if authenticated
-
+        return const HomePageScreen();
       },
     );
   }

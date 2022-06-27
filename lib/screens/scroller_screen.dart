@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../style_guide.dart';
 
 class ScrollerScreen extends StatefulWidget {
+  static const String routeName = '/scroller';
   const ScrollerScreen({Key? key}) : super(key: key);
 
   @override

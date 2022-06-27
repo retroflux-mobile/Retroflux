@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:retroflux/providers/test_img_provider.dart';
+import 'package:retroflux/screens/addpage_screen.dart';
+import 'package:retroflux/screens/chatbot_screen.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
 import 'package:retroflux/screens/login_method_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:retroflux/tests/provider_test_screen.dart';
-import 'package:retroflux/tests/tests_screen.dart';
+import 'package:retroflux/screens/notehub_screen.dart';
+import 'package:retroflux/screens/profile_screen.dart';
+import 'package:retroflux/screens/scroller_screen.dart';
+import 'package:retroflux/screens/tests_screen.dart';
 import 'firebase_options.dart';
 
-
-
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -26,23 +25,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-
-      create: (BuildContext context) => TestImgs(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          primarySwatch: Colors.blue,
-        ),
-        home: const LoginMethodScreen(),
-        routes: {
-          '/LoginMethodScreen':(ctx)=>const LoginMethodScreen(),
-          '/HomePageScreen':(ctx)=> const HomePageScreen(),
-          '/TestsScreen':(ctx)=> const TestsScreen(),
-          '/ProviderTestScreen':(ctx)=>const ProviderTestScreen(),
-        },
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        primarySwatch: Colors.blue,
       ),
+      home: const LoginMethodScreen(),
+      routes: {
+        AddPageScreen.routeName: (context) => AddPageScreen(),
+        ChatbotScreen.routeName: (context) => ChatbotScreen(),
+        HomePageScreen.routeName: (context) => HomePageScreen(),
+        LoginMethodScreen.routeName: (context) => LoginMethodScreen(),
+        NotehubScreen.routeName: (context) => NotehubScreen(),
+        ProfileScreen.routeName: (context) => ProfileScreen(),
+        ScrollerScreen.routeName: (context) => ScrollerScreen(),
+        TestsScreen.routeName: (context) => TestsScreen(),
+      },
+      onGenerateRoute: (RouteSettings settings) {
+        var routes = <String, WidgetBuilder>{
+          // ScrollerScreen.routeName: (context) => ScrollerScreen(),
+        };
+        WidgetBuilder? builder = routes[settings.name];
+        return MaterialPageRoute(builder: (ctx) => builder!(ctx));
+      },
     );
   }
 }

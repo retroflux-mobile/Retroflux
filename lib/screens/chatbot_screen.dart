@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:retroflux/style_guide.dart';
 
 class ChatbotScreen extends StatefulWidget {
+  static const String routeName = '/chatbot';
   const ChatbotScreen({Key? key}) : super(key: key);
 
   @override
