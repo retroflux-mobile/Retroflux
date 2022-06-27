@@ -34,9 +34,11 @@ class LoginMethodScreen extends StatelessWidget {
                 ),
               ]
           );
+        }else{
+          return const HomePageScreen();
         }
         // Render your application if authenticated
-        return const HomePageScreen();
+
       },
     );
   }

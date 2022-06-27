@@ -43,6 +43,7 @@ dependencies:
   firebase_core: ^1.18.0
   flutterfire_ui: ^0.4.2
   google_sign_in: ^5.3.3
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:

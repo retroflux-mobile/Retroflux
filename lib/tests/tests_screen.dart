@@ -18,10 +18,18 @@ class TestsScreen extends StatelessWidget {
             title: const Text("Sign Out"),
             onTap: (){
               _signOut();
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginMethodScreen()));
+              Navigator.of(context).pushReplacementNamed('/LoginMethodScreen');
             }
+          ),
+          ListTile(
+              title: const Text("Provider Test"),
+              onTap: (){
+                Navigator.of(context).pushNamed('/ProviderTestScreen');
+              }
+          ),
+          ListTile(
+            title: const Text("Yet Another Test"),
+            onTap: (){},
           ),
           ListTile(
             title: const Text("Yet Another Test"),

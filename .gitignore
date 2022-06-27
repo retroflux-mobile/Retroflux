@@ -46,3 +46,6 @@ app.*.map.json
 
 # Firebase config
 lib/firebase_options.dart
+
+#windows cmake
+windows/flutter/generated_plugins.cmake
