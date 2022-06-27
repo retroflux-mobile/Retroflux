@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../style_guide.dart';
 
 class NotehubScreen extends StatefulWidget {
+  static const String routeName = '/notehub';
   const NotehubScreen({Key? key}) : super(key: key);
 
   @override

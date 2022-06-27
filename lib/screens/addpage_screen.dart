@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:retroflux/style_guide.dart';
 
 class AddPageScreen extends StatefulWidget {
+  static const String routeName = '/addpage';
   const AddPageScreen({Key? key}) : super(key: key);
 
   @override

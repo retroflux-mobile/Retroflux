@@ -10,6 +10,7 @@ import 'package:retroflux/tests/tests_screen.dart';
 import '../style_guide.dart';
 
 class HomePageScreen extends StatefulWidget {
+  static const String routeName = '/homepage';
   const HomePageScreen({Key? key}) : super(key: key);
 
   @override
