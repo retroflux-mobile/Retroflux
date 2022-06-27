@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:retroflux/screens/login_method_screen.dart';
 
 class TestsScreen extends StatelessWidget {
+  static const String routeName = '/TestsScreen';
   const TestsScreen({Key? key}) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class TestsScreen extends StatelessWidget {
             title: const Text("Sign Out"),
             onTap: (){
               _signOut();
-              Navigator.of(context).pushReplacementNamed('/LoginMethodScreen');
+
             }
           ),
           ListTile(

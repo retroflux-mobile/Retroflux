@@ -13,8 +13,8 @@ class TestImgs with ChangeNotifier{
     return [..._loadedImgs];
   }
 
-  void addImg(){
-    //_imgs.add(value);
+  void addImg(TestImg item){
+    _loadedImgs.add(item);
     notifyListeners();
   }
 
