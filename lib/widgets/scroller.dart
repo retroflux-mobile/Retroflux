@@ -1,22 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiktoklikescroller/tiktoklikescroller.dart';
-
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Image> images = <Image>[];
-
-    return MaterialApp(
-      home: Scroller(
-        images: images,
-      ),
-    );
-  }
-}
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Scroller extends StatefulWidget {
   const Scroller({
@@ -35,16 +19,25 @@ class Scroller extends StatefulWidget {
 
 class _ScrollerState extends State<Scroller> {
   late Controller controller;
+  late List<ItemScrollController> itemControllers;
+
+  Future scrollToItem(int listIdx, int itemIdx) async {
+    if(!itemControllers[listIdx].isAttached){
+      print('null controller');
+    }
+    itemControllers[listIdx].scrollTo(
+        index: itemIdx + 1, duration: const Duration(milliseconds: 500));
+  }
 
   @override
   initState() {
+    super.initState();
     controller = widget.testingController ?? Controller()
       ..addListener((event) {
         _handleCallbackEvent(event.direction, event.success);
       });
-
-    // controller.jumpToPosition(4);
-    super.initState();
+    itemControllers = List<ItemScrollController>.generate(
+        widget.images.length, (int index) => ItemScrollController());
   }
 
   @override
@@ -52,91 +45,35 @@ class _ScrollerState extends State<Scroller> {
     return Scaffold(
       body: TikTokStyleFullPageScroller(
         contentSize: widget.images.length,
-        swipePositionThreshold: 0.2,
+        swipePositionThreshold: 0.05,
         // ^ the fraction of the screen needed to scroll
-        swipeVelocityThreshold: 2000,
+        swipeVelocityThreshold: 1000,
         // ^ the velocity threshold for smaller scrolls
-        animationDuration: const Duration(milliseconds: 400),
+        animationDuration: const Duration(milliseconds: 300),
         // ^ how long the animation will take
         controller: controller,
         // ^ registering our own function to listen to page changes
-        builder: (BuildContext context, int index) {
-          return Container(
-            // color: widget.images[index],
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: widget.images[index].image,
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Stack(children: [
-              Center(
-                child: Text(
-                  'Type:' +
-                      widget.images[index].image.runtimeType.toString() +
-                      '\n' +
-                      (widget.images[index].image as NetworkImage).url,
-                  key: Key('$index-text'),
-                  style: const TextStyle(fontSize: 20, color: Colors.white),
-                ),
-              ),
-              Positioned(
-                bottom: 30,
-                left: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  color: Colors.white.withAlpha(125),
-                  child: Column(
-                    children: [
-                      const Text(
-                          "--- Buttons For Testing Controller Functions ---"),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      const Text("Jump To:"),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ...Iterable<int>.generate(widget.images.length)
-                                .toList()
-                                .map(
-                                  (e) => MaterialButton(
-                                    color: Colors.white.withAlpha(125),
-                                    child: Text(
-                                      "$e",
-                                      key: Key('$e-jump'),
-                                    ),
-                                    onPressed: () =>
-                                        controller.jumpToPosition(e),
-                                  ),
-                                )
-                                .toList(),
-                          ]),
-                      const Text("Animate To:"),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ...Iterable<int>.generate(widget.images.length)
-                                .toList()
-                                .map(
-                                  (e) => MaterialButton(
-                                    color: Colors.white.withAlpha(125),
-                                    child: Text(
-                                      "$e",
-                                      key: Key('$e-animate'),
-                                    ),
-                                    onPressed: () =>
-                                        controller.animateToPosition(e),
-                                  ),
-                                )
-                                .toList(),
-                          ]),
-                    ],
-                  ),
-                ),
-              ),
-            ]),
+        builder: (BuildContext context, int listIdx) {
+          return ScrollablePositionedList.builder(
+            scrollDirection: Axis.horizontal,
+            itemScrollController: itemControllers[listIdx],
+            itemCount: 5,
+            itemBuilder: (BuildContext context, int itemIdx) {
+              return InkWell(
+                  onTap: () {
+                    scrollToItem(listIdx, itemIdx);
+                  },
+                  child: Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      alignment: Alignment.center,
+                      child: Center(
+                        child: Text(
+                            listIdx.toString() + ', ' + itemIdx.toString()),
+                      )));
+            },
           );
         },
       ),
@@ -146,6 +83,7 @@ class _ScrollerState extends State<Scroller> {
   void _handleCallbackEvent(ScrollDirection direction, ScrollSuccess success,
       {int? currentIndex}) {
     print(
-        "Scroll callback received with data: {direction: $direction, success: $success and index: ${currentIndex ?? 'not given'}}");
+        "Scroll callback received with data: {direction: $direction, success: $success and index: ${currentIndex ??
+            'not given'}}");
   }
 }

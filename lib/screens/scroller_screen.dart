@@ -25,6 +25,10 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
           image: NetworkImage(
               'https://flxt.tmsimg.com/assets/p12991665_b_v13_am.jpg'),
         ),
+        Image(
+          image: NetworkImage(
+              'https://flxt.tmsimg.com/assets/p12991665_b_v13_am.jpg'),
+        ),
       ],
     ));
   }
