@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:retroflux/firebase_options.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
-import 'package:retroflux/screens/signup_screen.dart';
 import 'package:retroflux/screens/signup_swipe_screen.dart';
 
 class LoginMethodScreen extends StatelessWidget {
