@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:retroflux/firebase_options.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
+import 'package:retroflux/screens/signup_screen.dart';
+import 'package:retroflux/screens/signup_swipe_screen.dart';
 
 class LoginMethodScreen extends StatelessWidget {
   static const String routeName = '/login_method';
 
   const LoginMethodScreen({Key? key}) : super(key: key);
+
+  bool checkIfNewUser() {
+    return FirebaseAuth.instance.currentUser?.metadata.creationTime ==
+        FirebaseAuth.instance.currentUser?.metadata.lastSignInTime;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,11 @@ class LoginMethodScreen extends StatelessWidget {
               ]);
         }
         // Render your application if authenticated
-        return const HomePageScreen();
+        if (checkIfNewUser()) {
+          return SignUpSwipeScreen();
+        } else {
+          return const HomePageScreen();
+        }
       },
     );
   }
