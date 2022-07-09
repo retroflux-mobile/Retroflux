@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -8,11 +9,12 @@ import 'package:retroflux/screens/signup_swipe_screen.dart';
 class LoginMethodScreen extends StatelessWidget {
   static const String routeName = '/login_method';
 
+  
   const LoginMethodScreen({Key? key}) : super(key: key);
 
-  bool checkIfNewUser() {
-    return FirebaseAuth.instance.currentUser?.metadata.creationTime ==
-        FirebaseAuth.instance.currentUser?.metadata.lastSignInTime;
+  Future<bool> checkIfNewUser(User currentUser) async {
+    final userDoc = await FirebaseFirestore.instance.collection("Users").doc(currentUser.uid).get();
+    return !userDoc.exists;
   }
 
   @override
@@ -38,15 +40,19 @@ class LoginMethodScreen extends StatelessWidget {
               providerConfigs: const [
                 EmailProviderConfiguration(),
                 GoogleProviderConfiguration(
-                  clientId: googleWbeID,
+                  clientId: googleWebID,
                 ),
               ]);
-        }
-        // Render your application if authenticated
-        if (checkIfNewUser()) {
-          return SignUpSwipeScreen();
-        } else {
-          return const HomePageScreen();
+        }else{
+          return FutureBuilder(
+              future: checkIfNewUser(snapshot.data!),
+              builder: (context, boolSnapshot){
+                if( boolSnapshot.connectionState == ConnectionState.done){
+                  return boolSnapshot.data! as bool?const SignUpSwipeScreen():const HomePageScreen();
+                }else{
+                  return const Center(child: CircularProgressIndicator());
+                }
+              });
         }
       },
     );
