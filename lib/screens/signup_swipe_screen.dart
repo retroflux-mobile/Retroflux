@@ -107,7 +107,7 @@ class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
 
     try {
       TaskSnapshot taskSnapshot = await avatarsRef
-          .child(avatarPathField.text)
+          .child("${emailField.text}.jpg")
           .putFile(File(avatarPathField.text));
 
       print(taskSnapshot);
