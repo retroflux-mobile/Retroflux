@@ -9,11 +9,13 @@ import 'package:retroflux/screens/signup_swipe_screen.dart';
 class LoginMethodScreen extends StatelessWidget {
   static const String routeName = '/login_method';
 
-  
   const LoginMethodScreen({Key? key}) : super(key: key);
 
   Future<bool> checkIfNewUser(User currentUser) async {
-    final userDoc = await FirebaseFirestore.instance.collection("Users").doc(currentUser.uid).get();
+    final userDoc = await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(currentUser.uid)
+        .get();
     return !userDoc.exists;
   }
 
@@ -40,16 +42,18 @@ class LoginMethodScreen extends StatelessWidget {
               providerConfigs: const [
                 EmailProviderConfiguration(),
                 GoogleProviderConfiguration(
-                  clientId: googleWebID,
+                  clientId: GOOGLEWEBID,
                 ),
               ]);
-        }else{
+        } else {
           return FutureBuilder(
               future: checkIfNewUser(snapshot.data!),
-              builder: (context, boolSnapshot){
-                if( boolSnapshot.connectionState == ConnectionState.done){
-                  return boolSnapshot.data! as bool?const SignUpSwipeScreen():const HomePageScreen();
-                }else{
+              builder: (context, boolSnapshot) {
+                if (boolSnapshot.connectionState == ConnectionState.done) {
+                  return boolSnapshot.data! as bool
+                      ? const SignUpSwipeScreen()
+                      : const HomePageScreen();
+                } else {
                   return const Center(child: CircularProgressIndicator());
                 }
               });
