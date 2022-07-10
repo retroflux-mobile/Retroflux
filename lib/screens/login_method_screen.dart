@@ -41,7 +41,7 @@ class LoginMethodScreen extends StatelessWidget {
               providerConfigs: const [
                 EmailProviderConfiguration(),
                 GoogleProviderConfiguration(
-                  clientId: googleWbeID,
+                  clientId: googleWebID,
                 ),
               ]);
         }else{
