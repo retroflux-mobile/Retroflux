@@ -17,7 +17,7 @@ class TestsScreen extends StatelessWidget {
           ListTile(
             title: const Text("Sign Out"),
             onTap: (){
-              _signOut();
+              _signOut(context);
 
             }
           ),
@@ -45,6 +45,7 @@ class TestsScreen extends StatelessWidget {
   }
 }
 
-Future<void> _signOut() async {
+Future<void> _signOut(BuildContext context) async {
   await FirebaseAuth.instance.signOut();
+  Navigator.of(context).pushReplacementNamed('/login_method');
 }
