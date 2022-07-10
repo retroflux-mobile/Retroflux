@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,6 +21,7 @@ class SignUpSwipeScreen extends StatefulWidget {
 }
 
 class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
+  User? _currentUser = FirebaseAuth.instance.currentUser;
   var colors = [Colors.blue, Colors.pink];
   final tags = [
     'Name',
@@ -79,7 +81,7 @@ class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
             FirebaseFirestore.instance.collection('Users');
 
         final avatarUrl = await _addAvatarToCloudStorage();
-        await users.add({
+        await users.doc(_currentUser?.uid).set({
           'name': nameField.text,
           'major': majorField.text,
           'location': locationField.text,

@@ -14,6 +14,7 @@ class LoginMethodScreen extends StatelessWidget {
 
   Future<bool> checkIfNewUser(User currentUser) async {
     final userDoc = await FirebaseFirestore.instance.collection("Users").doc(currentUser.uid).get();
+    print(userDoc.exists);
     return !userDoc.exists;
   }
 
@@ -47,8 +48,9 @@ class LoginMethodScreen extends StatelessWidget {
           return FutureBuilder(
               future: checkIfNewUser(snapshot.data!),
               builder: (context, boolSnapshot){
-                if( boolSnapshot.connectionState == ConnectionState.done){
-                  return boolSnapshot.data! as bool?const SignUpSwipeScreen():const HomePageScreen();
+                if( boolSnapshot.connectionState == ConnectionState.done ){
+                  bool checkNew = boolSnapshot.data! as bool;
+                  return checkNew?const SignUpSwipeScreen():const HomePageScreen();
                 }else{
                   return const Center(child: CircularProgressIndicator());
                 }
