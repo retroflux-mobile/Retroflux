@@ -5,12 +5,12 @@ import 'package:tiktoklikescroller/tiktoklikescroller.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Scroller extends StatefulWidget {
+  final List<List<Widget>> widgetList;
+
   const Scroller({
     Key? key,
     required this.widgetList,
   }) : super(key: key);
-
-  final List<List<Widget>> widgetList;
 
   @override
   State<Scroller> createState() => _ScrollerState();
@@ -21,8 +21,7 @@ class _ScrollerState extends State<Scroller> {
   late List<ItemScrollController> itemControllers;
 
   Future scrollToItem(int listIdx, int itemIdx) async {
-    itemControllers[listIdx]
-        .scrollTo(index: itemIdx, duration: const Duration(milliseconds: 200));
+    itemControllers[listIdx].scrollTo(index: itemIdx, duration: const Duration(milliseconds: 200));
   }
 
   @override
@@ -54,22 +53,24 @@ class _ScrollerState extends State<Scroller> {
             itemCount: widget.widgetList[listIdx].length,
             itemBuilder: (BuildContext context, int itemIdx) {
               return GestureDetector(
-                  onHorizontalDragUpdate: (DragUpdateDetails details) {
-                    if (details.primaryDelta! < 0.0) {
-                      scrollToItem(listIdx,
-                          min(widget.widgetList[listIdx].length - 1, itemIdx + 1));
-                    } else {
-                      scrollToItem(listIdx, max(0, itemIdx - 1));
-                    }
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: widget.widgetList[listIdx][itemIdx],
-                      )));
+                onHorizontalDragUpdate: (DragUpdateDetails details) {
+                  if (details.primaryDelta! < 0.0) {
+                    scrollToItem(listIdx, min(widget.widgetList[listIdx].length - 1, itemIdx + 1));
+                  }
+                  else {
+                    scrollToItem(listIdx, max(0, itemIdx - 1));
+                  }
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: widget.widgetList[listIdx][itemIdx],
+                  )
+                )
+              );
             },
           );
         },
@@ -77,9 +78,7 @@ class _ScrollerState extends State<Scroller> {
     );
   }
 
-  void _handleCallbackEvent(ScrollDirection direction, ScrollSuccess success,
-      {int? currentIndex}) {
-    print(
-        "Scroll callback received with data: {direction: $direction, success: $success and index: ${currentIndex ?? 'not given'}}");
+  void _handleCallbackEvent(ScrollDirection direction, ScrollSuccess success,{int? currentIndex}) {
+    print("Scroll callback received with data: {direction: $direction, success: $success and index: ${currentIndex ?? 'not given'}}");
   }
 }
