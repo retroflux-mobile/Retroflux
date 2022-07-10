@@ -47,5 +47,4 @@ class TestsScreen extends StatelessWidget {
 
 Future<void> _signOut() async {
   await FirebaseAuth.instance.signOut();
-
 }
