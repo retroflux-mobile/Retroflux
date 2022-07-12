@@ -15,7 +15,8 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Scroller(widgetList: [
+      child: Scroller(
+        widgetList: [
           [
             const Image(
               image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
@@ -35,9 +36,9 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
             ),
             const TextField(
               decoration: InputDecoration(
-                labelText: "PWD",
-                hintText: "PWD",
-                prefixIcon: Icon(Icons.lock)
+                  labelText: "PWD",
+                  hintText: "PWD",
+                  prefixIcon: Icon(Icons.lock)
               ),
               obscureText: true,
             ),
