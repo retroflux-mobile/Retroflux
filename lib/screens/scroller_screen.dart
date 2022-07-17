@@ -18,21 +18,35 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
       child: Scroller(
         widgetList: [
           [
-            const Image(
-              image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-            ),
-            const Image(
-              image: NetworkImage('https://flxt.tmsimg.com/assets/p12991665_b_v13_am.jpg'),
+            ElevatedButton(
+              onPressed: () { },
+              child: const Text("1"),
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.purple,
+              ),
             ),
             ElevatedButton(
               onPressed: () { },
-              child: const Text("normal"),
+              child: const Text("2"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () { },
+              child: const Text("3"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blueGrey,
+              ),
             )
           ],
           [
-            IconButton(
-              icon: const Icon(Icons.thumb_up),
-              onPressed: () {},
+            Container(
+              color: Colors.green,
+              child: IconButton(
+                icon: const Icon(Icons.thumb_up),
+                onPressed: () {},
+              ),
             ),
             const TextField(
               decoration: InputDecoration(
