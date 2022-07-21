@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retroflux/providers/test_img_provider.dart';
+import 'package:retroflux/providers/user_provider.dart';
 import 'package:retroflux/screens/addpage_screen.dart';
 import 'package:retroflux/screens/chatbot_screen.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
@@ -28,8 +29,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context)=> TestImgs(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TestImgs()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
       child: MaterialApp(
         theme: ThemeData(
           // This is the theme of your application.
@@ -45,7 +49,7 @@ class MyApp extends StatelessWidget {
           ProfileScreen.routeName: (context) => const ProfileScreen(),
           ScrollerScreen.routeName: (context) => const ScrollerScreen(),
           TestsScreen.routeName: (context) => const TestsScreen(),
-          ProviderTestScreen.routeName:(context) => const ProviderTestScreen()
+          ProviderTestScreen.routeName: (context) => const ProviderTestScreen()
         },
         onGenerateRoute: (RouteSettings settings) {
           var routes = <String, WidgetBuilder>{
