@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:retroflux/models/pdf_info.dart';
 
 import '../widgets/scroller.dart';
 
@@ -16,47 +17,9 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: Scroller(
-        widgetList: [
-          [
-            ElevatedButton(
-              onPressed: () { },
-              child: const Text("1"),
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.purple,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () { },
-              child: const Text("2"),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.grey,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () { },
-              child: const Text("3"),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blueGrey,
-              ),
-            )
-          ],
-          [
-            Container(
-              color: Colors.green,
-              child: IconButton(
-                icon: const Icon(Icons.thumb_up),
-                onPressed: () {},
-              ),
-            ),
-            const TextField(
-              decoration: InputDecoration(
-                  labelText: "PWD",
-                  hintText: "PWD",
-                  prefixIcon: Icon(Icons.lock)
-              ),
-              obscureText: true,
-            ),
-          ]
+        pdfList: [
+          PdfInfo(path:"assets/sample.pdf", favoritesIndices:[1,3,5]),
+          PdfInfo(path:"assets/sample.pdf", favoritesIndices:[2,4]),
         ]
       )
     );

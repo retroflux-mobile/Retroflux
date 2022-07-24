@@ -34,13 +34,18 @@ class SidebarButtons extends StatelessWidget {
             isFavorite: isFavorite,
           ),
           _IconButton(
-            icon: const IconToText(Icons.mode_comment, size: 36),
-            text: '4213',
+            icon: const IconToText(Icons.comment, size: 36),
+            text: '',
             onTap: onComment,
           ),
           _IconButton(
-            icon: const IconToText(Icons.share, size: 40),
-            text: '346',
+            icon: const IconToText(Icons.keyboard_arrow_left, size: 36, color: Colors.blue),
+            text: '',
+            onTap: onComment,
+          ),
+          _IconButton(
+            icon: const IconToText(Icons.keyboard_arrow_right, size: 36, color: Colors.blue),
+            text: '',
             onTap: onShare,
           ),
           Container(
@@ -75,7 +80,7 @@ class FavoriteIcon extends StatelessWidget {
         size: 40,
         color: isFavorite! ? Colors.red : null,
       ),
-      text: '1.0w',
+      text: '',
       onTap: onFavorite,
     );
   }

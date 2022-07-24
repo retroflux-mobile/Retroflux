@@ -1,16 +1,17 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:tiktoklikescroller/tiktoklikescroller.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+
+import '../models/pdf_info.dart';
 import '../widgets/sidebar_buttons.dart';
+import '../widgets/pdf_viewer.dart';
 
 class Scroller extends StatefulWidget {
-  final List<List<Widget>> widgetList;
+  final List<PdfInfo> pdfList;
 
   const Scroller({
     Key? key,
-    required this.widgetList,
+    required this.pdfList,
   }) : super(key: key);
 
   @override
@@ -19,12 +20,6 @@ class Scroller extends StatefulWidget {
 
 class _ScrollerState extends State<Scroller> {
   late Controller controller;
-  late List<ItemScrollController> itemControllers;
-
-  Future scrollToItem(int listIdx, int itemIdx) async {
-    itemControllers[listIdx]
-        .scrollTo(index: itemIdx, duration: const Duration(milliseconds: 200));
-  }
 
   @override
   initState() {
@@ -33,58 +28,32 @@ class _ScrollerState extends State<Scroller> {
       ..addListener((event) {
         _handleCallbackEvent(event.direction, event.success);
       });
-    itemControllers = List<ItemScrollController>.generate(
-        widget.widgetList.length, (int index) => ItemScrollController());
   }
 
   @override
   Widget build(BuildContext context) {
     return TikTokStyleFullPageScroller(
-      contentSize: widget.widgetList.length,
+      contentSize: widget.pdfList.length,
       swipePositionThreshold: 0.05,
       // ^ the fraction of the screen needed to scroll
       swipeVelocityThreshold: 1000,
       // ^ the velocity threshold for smaller scrolls
       controller: controller,
       // ^ registering our own function to listen to page changes
-      builder: (BuildContext context, int listIdx) {
+      builder: (BuildContext context, int index) {
+        PdfViewerController pdfViewerController = PdfViewerController();
+        PdfInfo pi = widget.pdfList[index];
+        PdfViewer pv = PdfViewer(path: pi.path, favoritesIndices:pi.favoritesIndices, pdfViewerController: pdfViewerController);
         Widget sidebarButtons = SidebarButtons(
           isFavorite: false,
           onAvatar: () {},
           onFavorite: () {},
-          onComment: () {},
-          onShare: () {},
+          onComment: () {pv.jumpToPrevFavorite();},
+          onShare: () {pv.jumpToNextFavorite();},
         );
         return Stack(
           children: <Widget>[
-            ScrollablePositionedList.builder(
-              scrollDirection: Axis.horizontal,
-              itemScrollController: itemControllers[listIdx],
-              itemCount: widget.widgetList[listIdx].length,
-              itemBuilder: (BuildContext context, int itemIdx) {
-                return GestureDetector(
-                  onHorizontalDragUpdate: (DragUpdateDetails details) {
-                    if (details.primaryDelta! < 0.0) {
-                      scrollToItem(
-                          listIdx,
-                          min(widget.widgetList[listIdx].length - 1,
-                              itemIdx + 1));
-                    } else {
-                      scrollToItem(listIdx, max(0, itemIdx - 1));
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: widget.widgetList[listIdx][itemIdx],
-                    )
-                  )
-                );
-              },
-            ),
+            pv,
             Container(
               height: double.infinity,
               width: double.infinity,
