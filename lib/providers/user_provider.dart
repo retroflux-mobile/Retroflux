@@ -23,6 +23,7 @@ class UserProvider with ChangeNotifier {
           major: data["major"],
           name: data["name"],
           other: data["other"],
+          category:data["category"]
         );
       }
     }

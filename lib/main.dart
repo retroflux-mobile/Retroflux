@@ -12,6 +12,7 @@ import 'package:retroflux/screens/profile_screen.dart';
 import 'package:retroflux/screens/scroller_screen.dart';
 import 'package:retroflux/tests/provider_test_screen.dart';
 import 'package:retroflux/tests/tests_screen.dart';
+import 'package:retroflux/widgets/notes_display.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
           ProfileScreen.routeName: (context) => const ProfileScreen(),
           ScrollerScreen.routeName: (context) => const ScrollerScreen(),
           TestsScreen.routeName: (context) => const TestsScreen(),
-          ProviderTestScreen.routeName: (context) => const ProviderTestScreen()
+          ProviderTestScreen.routeName: (context) => const ProviderTestScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
           var routes = <String, WidgetBuilder>{
