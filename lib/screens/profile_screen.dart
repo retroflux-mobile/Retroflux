@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:retroflux/providers/user_provider.dart';
 import 'package:retroflux/style_guide.dart';
 
 TextStyle tempStyle =
@@ -36,6 +38,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   };
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      retrieveUserInfo();
+    });
+  }
+
+  Future<void> retrieveUserInfo() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.currentUser != null) {
+      final userInfo = await userProvider.getUserInfo();
+      if (userInfo != null) {
+        setState(() {
+          // TODO: Kai, please map the userInfo to the infoMap as you need
+          print(userInfo.name);
+          infoMap['Name'] = userInfo.name;
+          // infoMap['Username'] = userInfo.username;
+          // infoMap['Pronouns'] = userInfo.pronouns;
+          // infoMap['Website'] = userInfo.website;
+          // infoMap['Bio'] = userInfo.bio;
+          infoMap['Email'] = userInfo.email;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(color: Colors.black),
@@ -49,23 +79,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height:135,
-                  width:135,
-                  child: Stack(
-                      children: [
-                        const Center(
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage('https://avatars.dicebear.com/api/adventurer-neutral/random.png'),
-                            radius: 60,
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.bottomRight,
-                            child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.add_circle_outlined,color: Colors.orange,size: 40,)))
-                      ]
-                  ),
+                  height: 135,
+                  width: 135,
+                  child: Stack(children: [
+                    const Center(
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            'https://avatars.dicebear.com/api/adventurer-neutral/random.png'),
+                        radius: 60,
+                      ),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.add_circle_outlined,
+                              color: Colors.orange,
+                              size: 40,
+                            )))
+                  ]),
                 ),
                 const SizedBox(height: 0),
                 const Text(
@@ -236,14 +269,14 @@ class UserInfoPanel extends StatelessWidget {
                 height: 40,
                 width: 100,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: const [
                       BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
-                    )]
-                ),
+                        color: Colors.grey,
+                        blurRadius: 2,
+                      )
+                    ]),
                 child: const Center(child: Text('Edit'))),
           ),
         )
