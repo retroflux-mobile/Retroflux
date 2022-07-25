@@ -48,7 +48,7 @@ class LoginMethodScreen extends StatelessWidget {
           return FutureBuilder(
               future: checkIfNewUser(snapshot.data!),
               builder: (context, boolSnapshot){
-                if( boolSnapshot.connectionState == ConnectionState.done ){
+                if( boolSnapshot.connectionState == ConnectionState.done){
                   bool checkNew = boolSnapshot.data! as bool;
                   return checkNew?const SignUpSwipeScreen():const HomePageScreen();
                 }else{
