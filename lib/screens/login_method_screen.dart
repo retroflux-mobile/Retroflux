@@ -15,7 +15,7 @@ class LoginMethodScreen extends StatelessWidget {
   Future<bool> checkIfNewUser(User currentUser) async {
     final userDoc = await FirebaseFirestore.instance.collection("Users").doc(currentUser.uid).get();
     print(userDoc.exists);
-    return !userDoc.exists;
+    return false;
   }
 
   @override
