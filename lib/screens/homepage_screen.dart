@@ -48,7 +48,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
             title: 'Notehub',
           ),
           TabItem(
-            icon: Icon(Icons.add,size:40,color: Colors.white,),
+            icon: Icon(Icons.add,size:40,color: Colors.grey,),
             title: 'Add',
           ),
           TabItem(
@@ -61,9 +61,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
           ),
         ],
         onTap: (index){
+          if(index!=2){
           setState(() {
             _bottomNavBarIndex = index;
-          });
+          });}else{
+            showAddDialog(context);
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
