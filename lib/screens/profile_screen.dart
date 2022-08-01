@@ -140,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Color(0xffD9D9D9),
+                    color: const Color(0xffD9D9D9),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -151,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     labelColor: Colors.black,
                     unselectedLabelColor: Colors.black45,
-                    tabs: [
+                    tabs: const [
                       Tab(child: Text('Info')),
                       Tab(child: Text('Stats')),
                       Tab(child: Text('Settings')),
