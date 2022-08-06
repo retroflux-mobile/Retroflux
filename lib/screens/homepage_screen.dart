@@ -75,6 +75,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           Navigator.pushNamed(context, '/TestsScreen');
         },
       ),
+      resizeToAvoidBottomInset: false,
     );
   }
 }

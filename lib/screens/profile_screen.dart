@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   height: 135,
                   width: 135,
                   child: Stack(children: [

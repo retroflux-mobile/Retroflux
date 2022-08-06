@@ -16,6 +16,7 @@ class ChatbotScreen extends StatefulWidget {
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
 
+  TextEditingController _chatInputController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final messageData = Provider.of<Chat>(context);
@@ -23,17 +24,63 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       future: getChatMessages(messageData),
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         List<ChatMessage> messages = messageData.loadedMessages;
-        return ListView.builder(
-            itemCount: messages.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(10,20,10,10),
-                child: Text(
-                  messages[index].contentString,
-                  textAlign: messages[index].isSender?TextAlign.end:TextAlign.start,
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.8,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                  itemCount: messages.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    ChatMessage message = messages[index];
+                    return Container(
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+                      alignment: message.isSender?Alignment.topRight:Alignment.topLeft,
+                      child: Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width*0.6
+                        ),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: message.isSender?Colors.blueGrey:Colors.blue,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Text(
+                          message.contentString,
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child:TextField(
+                      controller: _chatInputController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Say something :D',
+                      ),
+                    ),
+                  ),
                 ),
-              );
-            });
+                IconButton(
+                    onPressed: (){
+                      messageData.addMsg(
+                        ChatMessage(
+                            contentString: _chatInputController.text,
+                            isSender: true,
+                            attachedFilePath: "")
+                      );
+                      print(messageData.loadedMessages.length);
+                    },
+                    icon: Icon(Icons.send))
+              ],
+            )
+          ],
+        );
       }
     );
   }
