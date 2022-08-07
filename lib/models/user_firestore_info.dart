@@ -5,6 +5,7 @@ class UserFireStoreInfo {
   final String major;
   final String name;
   final String other;
+  final List<dynamic> category;
 
   UserFireStoreInfo({
     required this.avatar,
@@ -13,5 +14,6 @@ class UserFireStoreInfo {
     required this.major,
     required this.name,
     required this.other,
+    required this.category
   });
 }

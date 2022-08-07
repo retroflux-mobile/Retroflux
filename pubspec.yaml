@@ -51,6 +51,7 @@ dependencies:
   cloud_firestore: ^3.2.1
   firebase_storage: ^10.3.1
   syncfusion_flutter_pdfviewer: ^20.2.39-beta
+  file_picker: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -75,8 +76,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-     - assets/sample.pdf
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
