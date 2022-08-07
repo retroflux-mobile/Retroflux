@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:retroflux/providers/chat_message_provider.dart';
 import '../providers/chat_provider.dart';
@@ -15,13 +14,14 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
-
+  bool initialed = false;
+  final ScrollController _controller = ScrollController();
   TextEditingController _chatInputController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final messageData = Provider.of<Chat>(context);
     return FutureBuilder(
-      future: getChatMessages(messageData),
+      future: messageData.getChatMessages(),
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         List<ChatMessage> messages = messageData.loadedMessages;
         return Column(
@@ -32,26 +32,13 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               width: MediaQuery.of(context).size.width,
               child: ListView.builder(
                   itemCount: messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    ChatMessage message = messages[index];
-                    return Container(
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
-                      alignment: message.isSender?Alignment.topRight:Alignment.topLeft,
-                      child: Container(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width*0.6
-                        ),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: message.isSender?Colors.blueGrey:Colors.blue,
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: Text(
-                          message.contentString,
-                        ),
-                      ),
-                    );
-                  }),
+                  controller: _controller,
+                  itemBuilder: (ctx,i) => ChangeNotifierProvider.value(
+                      value: messages[i],
+                     child: chatMessageItem(message: messages[i]),
+              ),
+
+                  ),
             ),
             Row(
               children: [
@@ -67,14 +54,13 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   ),
                 ),
                 IconButton(
-                    onPressed: (){
+                    onPressed: () async {
                       messageData.addMsg(
                         ChatMessage(
                             contentString: _chatInputController.text,
                             isSender: true,
                             attachedFilePath: "")
-                      );
-                      print(messageData.loadedMessages.length);
+                      ).then((_){_controller.animateTo(_controller.position.maxScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.ease);});
                     },
                     icon: Icon(Icons.send))
               ],
@@ -86,18 +72,33 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 }
 
-Future<void> getChatMessages(Chat chatClass) async {
-  final file = await rootBundle.loadString("assets/chat_messages.json");
-  final json = await jsonDecode(file);
-  List<ChatMessage> messages = [];
-  for(Map<String, dynamic> messageJson in json["messages"]){
-    messages.add(
-        ChatMessage(
-            contentString: messageJson["contentString"],
-            isSender: messageJson["isSender"],
-            attachedFilePath: messageJson["attachedFilePath"]
-        )
+class chatMessageItem extends StatelessWidget {
+  const chatMessageItem({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+      alignment: message.isSender?Alignment.topRight:Alignment.topLeft,
+      child: Container(
+        constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width*0.6
+        ),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: message.isSender?Colors.blueGrey:Colors.blue,
+          borderRadius: BorderRadius.circular(10)
+        ),
+        child: Text(
+          message.contentString,
+        ),
+      ),
     );
   }
-  chatClass.setMsg(messages);
 }
+
