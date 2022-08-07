@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class SidebarButtons extends StatelessWidget {
   final double? bottomPadding;
   final bool isFavorite;
-  final VoidCallback? onFavorite;
+  final bool isSpeedMode;
+  final VoidCallback onFavorite;
+  final VoidCallback onSpeedMode;
   final VoidCallback? onComment;
   final VoidCallback? onShare;
   final VoidCallback? onAvatar;
+  final PdfViewerController pdfController;
   const SidebarButtons({
     Key? key,
     this.bottomPadding,
-    this.onFavorite,
+    required this.onFavorite,
+    required this.onSpeedMode,
     this.onComment,
     this.onShare,
     this.isFavorite = false,
+    this.isSpeedMode = true,
     this.onAvatar,
+    required this.pdfController,
   }) : super(key: key);
 
   @override
@@ -32,22 +39,14 @@ class SidebarButtons extends StatelessWidget {
           FavoriteIcon(
             onFavorite: onFavorite,
             isFavorite: isFavorite,
+            pdfController: pdfController,
           ),
           _IconButton(
             icon: const IconToText(Icons.comment, size: 36),
             text: '',
             onTap: onComment,
           ),
-          _IconButton(
-            icon: const IconToText(Icons.keyboard_arrow_left, size: 36, color: Colors.blue),
-            text: '',
-            onTap: onComment,
-          ),
-          _IconButton(
-            icon: const IconToText(Icons.keyboard_arrow_right, size: 36, color: Colors.blue),
-            text: '',
-            onTap: onShare,
-          ),
+          SpeedModeIcon(isSpeedMode: isSpeedMode, onSpeedMode: onSpeedMode),
           Container(
             width: 56,
             height: 56,
@@ -63,25 +62,60 @@ class SidebarButtons extends StatelessWidget {
   }
 }
 
-class FavoriteIcon extends StatelessWidget {
+class FavoriteIcon extends StatefulWidget {
   const FavoriteIcon({
     Key? key,
     required this.onFavorite,
-    this.isFavorite,
+    required this.isFavorite,
+    required this.pdfController,
   }) : super(key: key);
-  final bool? isFavorite;
-  final VoidCallback? onFavorite;
+  final bool isFavorite;
+  final VoidCallback onFavorite;
+  final PdfViewerController pdfController;
 
+  @override
+  State<StatefulWidget> createState() => FavoriteIconState();
+}
+
+class FavoriteIconState extends State<FavoriteIcon> {
   @override
   Widget build(BuildContext context) {
     return _IconButton(
       icon: IconToText(
         Icons.favorite,
         size: 40,
-        color: isFavorite! ? Colors.red : null,
+        color: widget.isFavorite ? Colors.red : null,
       ),
       text: '',
-      onTap: onFavorite,
+      onTap: () => {widget.onFavorite()},
+    );
+  }
+}
+
+class SpeedModeIcon extends StatefulWidget {
+  const SpeedModeIcon({
+    Key? key,
+    required this.isSpeedMode,
+    required this.onSpeedMode,
+  }) : super(key: key);
+  final bool isSpeedMode;
+  final VoidCallback onSpeedMode;
+
+  @override
+  State<StatefulWidget> createState() => SpeedModeIconState();
+}
+
+class SpeedModeIconState extends State<SpeedModeIcon> {
+  @override
+  Widget build(BuildContext context) {
+    return _IconButton(
+      icon: IconToText(
+        Icons.speed,
+        size: 40,
+        color: widget.isSpeedMode ? Colors.blue : null,
+      ),
+      text: '',
+      onTap: () => {widget.onSpeedMode()},
     );
   }
 }
@@ -93,22 +127,23 @@ class IconToText extends StatelessWidget {
   final Color? color;
 
   const IconToText(
-      this.icon, {
-        Key? key,
-        this.style,
-        this.size,
-        this.color,
-      }) : super(key: key);
+    this.icon, {
+    Key? key,
+    this.style,
+    this.size,
+    this.color,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Text(
       String.fromCharCode(icon!.codePoint),
-      style: style ?? TextStyle(
-        fontFamily: 'MaterialIcons',
-        fontSize: size ?? 30,
-        inherit: true,
-        color: color ?? Colors.white,
-      ),
+      style: style ??
+          TextStyle(
+            fontFamily: 'MaterialIcons',
+            fontSize: size ?? 30,
+            inherit: true,
+            color: color ?? Colors.white,
+          ),
     );
   }
 }

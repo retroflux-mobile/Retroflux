@@ -18,8 +18,8 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
     return Center(
       child: Scroller(
         pdfList: [
-          PdfInfo(path:"assets/sample.pdf", favoritesIndices:[1,3,5]),
-          PdfInfo(path:"assets/sample.pdf", favoritesIndices:[2,4]),
+          PdfInfo(path:"https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003", favoritePages:[1,3,5]),
+          PdfInfo(path:"https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003", favoritePages:[2,4]),
         ]
       )
     );

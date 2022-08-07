@@ -3,7 +3,6 @@ import 'package:tiktoklikescroller/tiktoklikescroller.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../models/pdf_info.dart';
-import '../widgets/sidebar_buttons.dart';
 import '../widgets/pdf_viewer.dart';
 
 class Scroller extends StatefulWidget {
@@ -43,25 +42,11 @@ class _ScrollerState extends State<Scroller> {
       builder: (BuildContext context, int index) {
         PdfViewerController pdfViewerController = PdfViewerController();
         PdfInfo pi = widget.pdfList[index];
-        PdfViewer pv = PdfViewer(path: pi.path, favoritesIndices:pi.favoritesIndices, pdfViewerController: pdfViewerController);
-        Widget sidebarButtons = SidebarButtons(
-          isFavorite: false,
-          onAvatar: () {},
-          onFavorite: () {},
-          onComment: () {pv.jumpToPrevFavorite();},
-          onShare: () {pv.jumpToNextFavorite();},
-        );
-        return Stack(
-          children: <Widget>[
-            pv,
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              alignment: Alignment.bottomRight,
-              child: sidebarButtons,
-            )
-          ],
-        );
+        PdfViewer pv = PdfViewer(
+            path: pi.path,
+            favoritePages: pi.favoritePages,
+            pdfViewerController: pdfViewerController);
+        return pv;
       },
     );
   }
