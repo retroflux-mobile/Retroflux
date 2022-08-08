@@ -34,29 +34,35 @@ class _HomePageScreenState extends State<HomePageScreen> {
     return Scaffold(
       body: _bottomNavBarTabs.elementAt(_bottomNavBarIndex),
       bottomNavigationBar: ConvexAppBar(
+        top: 0,
         initialActiveIndex: _bottomNavBarIndex,
-        activeColor: Colors.white,
+        activeColor: Colors.orange,
+        backgroundColor: Colors.black87,
         style: TabStyle.fixedCircle,
         items: const <TabItem>[
           TabItem(
-            icon: Icon(Icons.star,color: Colors.white,),
-            //Todo: New name for Scroller Screen
+            icon: Icon(Icons.home,color: Colors.white,),
+            activeIcon:Icon(Icons.home,color: Colors.orange,),
             title: 'Scroller',
           ),
           TabItem(
-            icon: Icon(Icons.star,color: Colors.white,),
+            icon: Icon(Icons.menu_book,color: Colors.white,),
+            activeIcon: Icon(Icons.menu_book,color: Colors.orange,),
             title: 'Notehub',
           ),
           TabItem(
-            icon: Icon(Icons.add,size:40,color: Colors.grey,),
+            icon: Icon(Icons.add,size:40,color: Colors.white,),
+            activeIcon: Icon(Icons.add,size:40,color: Colors.orange,),
             title: 'Add',
           ),
           TabItem(
-            icon: Icon(Icons.star,color: Colors.white,),
+            icon: Icon(Icons.chat,color: Colors.white,),
+            activeIcon: Icon(Icons.chat,color: Colors.orange,),
             title: 'ChatBot',
           ),
           TabItem(
-            icon: Icon(Icons.star,color: Colors.white,),
+            icon: Icon(Icons.person,color: Colors.white,),
+            activeIcon: Icon(Icons.person,color: Colors.orange,),
             title: 'Profile',
           ),
         ],
@@ -75,6 +81,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
           Navigator.pushNamed(context, '/TestsScreen');
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      resizeToAvoidBottomInset: false,
     );
   }
 }

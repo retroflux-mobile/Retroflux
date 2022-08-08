@@ -23,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   var infoMap = {
     'Name': 'name',
+    'avatar':"",
     'Username': 'username',
     'Pronouns': 'pronouns',
     'Website': 'website',
@@ -40,7 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       retrieveUserInfo();
     });
@@ -55,6 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // TODO: Kai, please map the userInfo to the infoMap as you need
           print(userInfo.name);
           infoMap['Name'] = userInfo.name;
+          infoMap['avatar'] = userInfo.avatar;
           // infoMap['Username'] = userInfo.username;
           // infoMap['Pronouns'] = userInfo.pronouns;
           // infoMap['Website'] = userInfo.website;
@@ -64,9 +65,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
   }
-
+  String avatar = "https://avatars.dicebear.com/api/adventurer-neutral/random.png";
   @override
   Widget build(BuildContext context) {
+    if(infoMap["avatar"]!= null){
+      avatar = infoMap["avatar"].toString();
+    }
     return Container(
       decoration: const BoxDecoration(color: Colors.black),
       child: Column(
@@ -79,13 +83,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: 135,
-                  width: 135,
+                  height: MediaQuery.of(context).size.width/3,
+                  width: MediaQuery.of(context).size.width/3,
                   child: Stack(children: [
-                    const Center(
+                    Center(
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://avatars.dicebear.com/api/adventurer-neutral/random.png'),
+                        backgroundImage: NetworkImage(avatar),
                         radius: 60,
                       ),
                     ),
@@ -159,16 +162,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(top: 10.0),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.45,
                     width: MediaQuery.of(context).size.width * 0.9,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(22, 5, 25, 5),
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
                       child: TabBarView(
                         children: [
                           UserInfoPanel(infoMap: infoMap),
@@ -237,9 +240,7 @@ class UserInfoPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return ListView(
       children: [
         for (var key in infoMap.keys)
           SizedBox(
@@ -252,9 +253,16 @@ class UserInfoPanel extends StatelessWidget {
                 children: [
                   Text(
                     key,
-                    style: tempStyle,
+                    //style: tempStyle,
                   ),
-                  Text(infoMap[key] == null ? 'None' : infoMap[key]!),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width/4,
+                      child: Text(
+                        infoMap[key] == null ? 'None' : infoMap[key]!,
+                        overflow: TextOverflow.fade,maxLines: 1,
+                        textAlign: TextAlign.end,
+                      )
+                  ),
                 ],
               ),
             ),
