@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -74,13 +75,22 @@ class _AddFileDialogState extends State<AddFileDialog> {
     categories += this.widget.userCategories;
 
     //Todo: implement notifyBackend upon uploading file.
-    Future<void> notifyBackend(String filePath) async {
-      await FirebaseFirestore.instance
+
+    Future<void> notifyBackend(String fileLink) async {
+      var dio = Dio();
+      final reference = FirebaseFirestore.instance
           .collection("Users")
           .doc(widget.userUID)
           .collection(dropdownValue)
-          .doc(fileName.text)
-          .set({"file_url": filePath});
+          .doc(fileName.text);
+
+      await reference.set({"file_url": fileLink})
+          .then((_){print("Users/${widget.userUID}/$dropdownValue/${fileName.text}");})
+          .then((_){
+            dio.post('http://10.0.0.229:60117/api/process_pdf',
+                data: {"collection_path":"Users/${widget.userUID}/$dropdownValue/${fileName.text}"});
+          });
+
     }
 
     return Padding(
@@ -171,8 +181,10 @@ class _AddFileDialogState extends State<AddFileDialog> {
                               .ref()
                               .child(filePath)
                               .putFile(noteFile)
-                              .then((_) {
-                            notifyBackend(filePath);
+                              .then((_) async {
+                            notifyBackend(await FirebaseStorage.instance
+                                .ref()
+                                .child(filePath).getDownloadURL());
                           }).then((_) => ScaffoldMessenger.of(context)
                                   .showSnackBar(
                                       SnackBar(content: Text("Success!"))));
