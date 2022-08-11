@@ -69,6 +69,15 @@ class _AddFileDialogState extends State<AddFileDialog> {
   final fileName = TextEditingController();
   var noteFile;
   String dropdownValue = "Choose category";
+  late ScaffoldMessengerState _scaffoldMessenger;
+
+  @override
+  void didChangeDependencies() {
+    _scaffoldMessenger = ScaffoldMessenger.of(context);
+    super.didChangeDependencies();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     List<String> categories = ["Choose category"];
@@ -87,7 +96,7 @@ class _AddFileDialogState extends State<AddFileDialog> {
       await reference.set({"file_url": fileLink})
           .then((_){print("Users/${widget.userUID}/$dropdownValue/${fileName.text}");})
           .then((_){
-            dio.post('http://10.0.0.229:60117/api/process_pdf',
+            dio.post('http://73.52.25.22:60117/api/process_pdf',
                 data: {"collection_path":"Users/${widget.userUID}/$dropdownValue/${fileName.text}"});
           });
 
@@ -167,7 +176,7 @@ class _AddFileDialogState extends State<AddFileDialog> {
                       if (noteFile == null ||
                           fileName.text == '' ||
                           dropdownValue == "Choose Cateory") {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        _scaffoldMessenger.showSnackBar(SnackBar(
                             content: Text("Please confirm information")));
                       } else {
                         String filePath = "UserPdf/" +
@@ -185,13 +194,13 @@ class _AddFileDialogState extends State<AddFileDialog> {
                             notifyBackend(await FirebaseStorage.instance
                                 .ref()
                                 .child(filePath).getDownloadURL());
-                          }).then((_) => ScaffoldMessenger.of(context)
+                          }).then((_) => _scaffoldMessenger
                                   .showSnackBar(
                                       SnackBar(content: Text("Success!"))));
                         } catch (err) {
                           print(err);
                           //Todo: Unhandled EXCEPTION
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          _scaffoldMessenger.showSnackBar(SnackBar(
                               content:
                                   Text("Upload failed: " + err.toString())));
                         } finally {
