@@ -81,6 +81,7 @@ class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
             FirebaseFirestore.instance.collection('Users');
 
         final avatarUrl = await _addAvatarToCloudStorage();
+        print(avatarUrl);
         await users.doc(_currentUser?.uid).set({
           'name': nameField.text,
           'major': majorField.text,
@@ -111,8 +112,6 @@ class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
       TaskSnapshot taskSnapshot = await avatarsRef
           .child("${emailField.text}.jpg")
           .putFile(File(avatarPathField.text));
-
-      print(taskSnapshot);
       return taskSnapshot.ref.getDownloadURL();
     } catch (e) {
       print(e);
@@ -171,6 +170,7 @@ class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
     }
     return null;
   }
+
 
   @override
   Widget build(BuildContext context) {

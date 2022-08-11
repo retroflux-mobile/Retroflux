@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retroflux/providers/chat_provider.dart';
 import 'package:retroflux/providers/test_img_provider.dart';
 import 'package:retroflux/providers/user_provider.dart';
 import 'package:retroflux/providers/pdf_provider.dart';
@@ -36,13 +37,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TestImgs()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => PdfProvider()),
+        ChangeNotifierProvider(create: (_) => Chat()),
       ],
       child: MaterialApp(
         theme: ThemeData(
           // This is the theme of your application.
           primarySwatch: Colors.blue,
         ),
-        home: const HomePageScreen(),
+        home: const LoginMethodScreen(),
         routes: {
           AddPageScreen.routeName: (context) => const AddPageScreen(),
           ChatbotScreen.routeName: (context) => const ChatbotScreen(),

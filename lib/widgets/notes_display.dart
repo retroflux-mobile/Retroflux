@@ -20,10 +20,14 @@ class _NotesDisplayState extends State<NotesDisplay> {
 
   Future<List<String>> RetriveNotes(String categroy) async {
     List<String> notes = [];
-    QuerySnapshot notesSnapshot = await FirebaseFirestore.instance.collection("Users")
+    QuerySnapshot notesSnapshot = await FirebaseFirestore.instance
+        .collection("Users")
         .doc(FirebaseAuth.instance.currentUser?.uid)
-        .collection(widget.category).get();
-    for (var element in notesSnapshot.docs) {notes.add(element.id);}
+        .collection(widget.category)
+        .get();
+    for (var element in notesSnapshot.docs) {
+      notes.add(element.id);
+    }
     return notes;
   }
 
@@ -32,9 +36,9 @@ class _NotesDisplayState extends State<NotesDisplay> {
     final pdfListData = Provider.of<PdfProvider>(context);
     return FutureBuilder(
         future: RetriveNotes(categroy),
-        builder: (context,snapshot){
+        builder: (context, snapshot) {
           List<String> notesList = [];
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             notesList = snapshot.data as List<String>;
           }
           return Scaffold(

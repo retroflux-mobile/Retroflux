@@ -1,0 +1,39 @@
+{
+  "messages": [
+    {
+      "isSender": true,
+      "contentString": "Give me some notes about Node.js",
+      "attachedFilePath": ""
+    },
+    {
+      "isSender": false,
+      "contentString": "Sorry we no longer use Node.js. You can try Deno",
+      "attachedFilePath": ""
+    },
+    {
+      "isSender": true,
+      "contentString": "Ok then, get some Deno notes ",
+      "attachedFilePath": ""
+    },
+    {
+      "isSender": false,
+      "contentString": "Sorry we no longer use Deno. Bun is the new stuff people care.wwwwwwwwwwwwahjdvaiuvbayuvbpiiehrbgvqhvyuqwegqfvcabiujefbaiudgvbauwpgeqqaoiuwergabfpisdbviaugrpf9qbucpiwuaghbiao",
+      "attachedFilePath": ""
+    },
+    {
+      "isSender": true,
+      "contentString": "So, may I have some Bun?",
+      "attachedFilePath": ""
+    },
+    {
+      "isSender": false,
+      "contentString": "Searching for closet Chinese restaurant around you",
+      "attachedFilePath": ""
+    },
+    {
+      "isSender": false,
+      "contentString": "Here's the bun",
+      "attachedFilePath": ""
+    }
+  ]
+}
