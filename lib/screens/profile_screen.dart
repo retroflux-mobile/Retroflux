@@ -23,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   var infoMap = {
     'Name': 'name',
-    'avatar':"",
+    'avatar': "",
     'Username': 'username',
     'Pronouns': 'pronouns',
     'Website': 'website',
@@ -36,6 +36,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'Security': 'SecuritySettingPage',
     'Dark mode': 'DarkModeSettingPage',
     'Language': 'LanguageSettingPage',
+  };
+
+  final fakeStat = {
+    'total notes': 128,
+    'reviewd today': 5,
+    'reviewd this week': 14,
+    'most viewed topic': "Philosphy",
+    'most viewed note': "Meaning of Existence"
   };
 
   @override
@@ -65,10 +73,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
   }
-  String avatar = "https://avatars.dicebear.com/api/adventurer-neutral/random.png";
+
+  String avatar =
+      "https://avatars.dicebear.com/api/adventurer-neutral/random.png";
   @override
   Widget build(BuildContext context) {
-    if(infoMap["avatar"]!= null){
+    if (infoMap["avatar"] != null) {
       avatar = infoMap["avatar"].toString();
     }
     return Container(
@@ -83,8 +93,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.width/3,
-                  width: MediaQuery.of(context).size.width/3,
+                  height: MediaQuery.of(context).size.width / 3,
+                  width: MediaQuery.of(context).size.width / 3,
                   child: Stack(children: [
                     Center(
                       child: CircleAvatar(
@@ -175,11 +185,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: TabBarView(
                         children: [
                           UserInfoPanel(infoMap: infoMap),
-                          const Center(
-                              child: Text(
-                            "Some stuff",
-                            style: testLargeFont,
-                          )),
+                          ListView(
+                            children: [
+                              for (var key in fakeStat.keys)
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ListTile(
+                                    title: Text(
+                                      key,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                      fakeStat[key].toString(),
+                                      style: TextStyle(
+                                          color: Colors.orange,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                           SettingsTab(settingsRoutes: settingsRoutes)
                         ],
                       ),
@@ -256,13 +284,13 @@ class UserInfoPanel extends StatelessWidget {
                     //style: tempStyle,
                   ),
                   SizedBox(
-                      width: MediaQuery.of(context).size.width/4,
+                      width: MediaQuery.of(context).size.width / 4,
                       child: Text(
                         infoMap[key] == null ? 'None' : infoMap[key]!,
-                        overflow: TextOverflow.fade,maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
                         textAlign: TextAlign.end,
-                      )
-                  ),
+                      )),
                 ],
               ),
             ),

@@ -49,22 +49,24 @@ class _NotehubScreenState extends State<NotehubScreen> {
                   padding: const EdgeInsets.all(3.0),
                   child: Container(
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(),
-                    ),
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => NotesDisplay(
-                                    category: category[index],
-                                  )));
-                        },
-                        child: Text(
-                          category[index],
-                          style: TextStyle(color: Colors.black),
-                        )),
+                    child: Stack(alignment: Alignment.center, children: [
+                      Icon(
+                        Icons.folder,
+                        size: 120,
+                        color: Colors.white,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => NotesDisplay(
+                                      category: category[index],
+                                    )));
+                          },
+                          child: Text(
+                            category[index],
+                            style: TextStyle(color: Colors.black),
+                          )),
+                    ]),
                   ),
                 );
               })),

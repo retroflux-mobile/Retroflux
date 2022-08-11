@@ -97,7 +97,7 @@ class chatMessageItem extends StatelessWidget {
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: message.isSender ? Colors.blueGrey : Colors.blue,
+            color: message.isSender ? Colors.grey : Colors.orange,
             borderRadius: BorderRadius.circular(10)),
         child: Text(
           message.contentString,
