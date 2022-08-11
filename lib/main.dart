@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:retroflux/providers/chat_provider.dart';
 import 'package:retroflux/providers/test_img_provider.dart';
 import 'package:retroflux/providers/user_provider.dart';
+import 'package:retroflux/providers/pdf_provider.dart';
 import 'package:retroflux/screens/addpage_screen.dart';
 import 'package:retroflux/screens/chatbot_screen.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => TestImgs()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => PdfProvider()),
         ChangeNotifierProvider(create: (_) => Chat()),
       ],
       child: MaterialApp(
