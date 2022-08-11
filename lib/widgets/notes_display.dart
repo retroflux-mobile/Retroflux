@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:retroflux/models/pdf_info.dart';
+import 'package:retroflux/providers/pdf_provider.dart';
+import 'package:retroflux/screens/scroller_screen.dart';
 
 class NotesDisplay extends StatefulWidget {
   static const String routeName = '/notes_display';
@@ -13,7 +16,6 @@ class NotesDisplay extends StatefulWidget {
 }
 
 class _NotesDisplayState extends State<NotesDisplay> {
-
   String get categroy => widget.category;
 
   Future<List<String>> RetriveNotes(String categroy) async {
@@ -27,6 +29,7 @@ class _NotesDisplayState extends State<NotesDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    final pdfListData = Provider.of<PdfProvider>(context);
     return FutureBuilder(
         future: RetriveNotes(categroy),
         builder: (context,snapshot){
@@ -35,35 +38,38 @@ class _NotesDisplayState extends State<NotesDisplay> {
             notesList = snapshot.data as List<String>;
           }
           return Scaffold(
-            appBar: AppBar(title: Text(categroy),),
-            body: snapshot.hasData?
-            GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1.0
-                ),
-                itemCount: notesList.length,
-                itemBuilder: (context,index){
-                  return Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: GestureDetector(
-                          onTap: (){
-                          },
-                          child: Text(notesList[index])
-                      ),
-                    ),
-                  );
-                }
-            )
-          :
-            const Center(child: CircularProgressIndicator())
-          );
-        }
-    );
+              appBar: AppBar(
+                title: Text(categroy),
+              ),
+              body: snapshot.hasData
+                  ? GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, childAspectRatio: 1.0),
+                      itemCount: notesList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: GestureDetector(
+                                onTap: () {
+                                  pdfListData.addPdfInfo(
+                                      PdfInfo(
+                                        path:'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003.pdf',
+                                        favoritePages: [1, 4]
+                                      )
+                                  );
+                                  Navigator.pushNamed(context, ScrollerScreen.routeName);
+                                },
+                                child: Text(notesList[index])),
+                          ),
+                        );
+                      })
+            : const Center(child: CircularProgressIndicator()));
+        });
   }
 }
