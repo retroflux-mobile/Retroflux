@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           // This is the theme of your application.
           primarySwatch: Colors.blue,
         ),
-        home: const HomePageScreen(),
+        home: const LoginMethodScreen(),
         routes: {
           AddPageScreen.routeName: (context) => const AddPageScreen(),
           ChatbotScreen.routeName: (context) => const ChatbotScreen(),
