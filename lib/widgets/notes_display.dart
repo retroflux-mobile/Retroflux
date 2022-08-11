@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retroflux/models/pdf_info.dart';
 import 'package:retroflux/providers/pdf_provider.dart';
+import 'package:retroflux/screens/homepage_screen.dart';
 import 'package:retroflux/screens/scroller_screen.dart';
 
 class NotesDisplay extends StatefulWidget {
@@ -61,19 +62,18 @@ class _NotesDisplayState extends State<NotesDisplay> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: GestureDetector(
                                 onTap: () {
-                                  pdfListData.addPdfInfo(
-                                      PdfInfo(
-                                        path:'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003.pdf',
-                                        favoritePages: [1, 4]
-                                      )
-                                  );
-                                  Navigator.pushNamed(context, ScrollerScreen.routeName);
+                                  pdfListData.addPdfInfo(PdfInfo(
+                                      path:
+                                          'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1Even.pdf?alt=media&token=a0d0454a-e5f7-4456-b4d8-d3dfe1e5ed22',
+                                      favoritePages: [1]));
+                                  Navigator.pushNamed(
+                                      context, HomePageScreen.routeName);
                                 },
                                 child: Text(notesList[index])),
                           ),
                         );
                       })
-            : const Center(child: CircularProgressIndicator()));
+                  : const Center(child: CircularProgressIndicator()));
         });
   }
 }
