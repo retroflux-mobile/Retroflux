@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:retroflux/models/pdf_info.dart';
 
 import '../widgets/scroller.dart';
 
@@ -16,33 +17,9 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: Scroller(
-        widgetList: [
-          [
-            const Image(
-              image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-            ),
-            const Image(
-              image: NetworkImage('https://flxt.tmsimg.com/assets/p12991665_b_v13_am.jpg'),
-            ),
-            ElevatedButton(
-              onPressed: () { },
-              child: const Text("normal"),
-            )
-          ],
-          [
-            IconButton(
-              icon: const Icon(Icons.thumb_up),
-              onPressed: () {},
-            ),
-            const TextField(
-              decoration: InputDecoration(
-                  labelText: "PWD",
-                  hintText: "PWD",
-                  prefixIcon: Icon(Icons.lock)
-              ),
-              obscureText: true,
-            ),
-          ]
+        pdfList: [
+          PdfInfo(path:"https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003", favoritePages:[1,3,5]),
+          PdfInfo(path:"https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003", favoritePages:[2,4]),
         ]
       )
     );

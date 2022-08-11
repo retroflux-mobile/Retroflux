@@ -50,6 +50,7 @@ dependencies:
   image_cropper: ^2.0.3
   cloud_firestore: ^3.2.1
   firebase_storage: ^10.3.1
+  syncfusion_flutter_pdfviewer: ^20.2.39-beta
   file_picker: ^5.0.0
   path_provider: ^2.0.11
 

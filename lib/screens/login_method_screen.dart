@@ -17,7 +17,7 @@ class LoginMethodScreen extends StatelessWidget {
         .doc(currentUser.uid)
         .get();
     print(userDoc.exists);
-    return !userDoc.exists;
+    return false;
   }
 
   @override
