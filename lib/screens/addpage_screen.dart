@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,7 +11,6 @@ class AddPageScreen extends StatefulWidget {
   static const String routeName = '/addpage';
   const AddPageScreen({Key? key}) : super(key: key);
 
-
   @override
   State<AddPageScreen> createState() => _AddPageScreenState();
 }
@@ -19,31 +19,46 @@ class _AddPageScreenState extends State<AddPageScreen> {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text("If you see this, something is wrong",style: testLargeFont,),
+      child: Text(
+        "If you see this, something is wrong",
+        style: testLargeFont,
+      ),
     );
   }
 }
 
-Future showAddDialog(context){
-  User? currentUser = FirebaseAuth.instance.currentUser;
+Future showAddDialog(context) async {
+  String currentUID = FirebaseAuth.instance.currentUser!.uid;
+
+  List<dynamic> userCategoriesDynamic = await FirebaseFirestore.instance
+      .collection("Users")
+      .doc(currentUID)
+      .get()
+      .then((value) => value["category"]);
+
+  List<String> userCategories = List<String>.from(userCategoriesDynamic);
   return showDialog(
     useSafeArea: false,
     barrierDismissible: true,
     context: context,
     builder: (BuildContext dialogContext) {
-      return AddFileDialog(userUID: currentUser?.uid,);
+      return AddFileDialog(
+        userUID: currentUID,
+        userCategories: userCategories,
+      );
     },
   );
 }
 
 class AddFileDialog extends StatefulWidget {
-
   const AddFileDialog({
     Key? key,
     this.userUID,
+    this.userCategories,
   }) : super(key: key);
 
   final userUID;
+  final userCategories;
 
   @override
   State<AddFileDialog> createState() => _AddFileDialogState();
@@ -52,16 +67,24 @@ class AddFileDialog extends StatefulWidget {
 class _AddFileDialogState extends State<AddFileDialog> {
   final fileName = TextEditingController();
   var noteFile;
-  String dropdownValue = 'CS';
-  List<String> categories = [
-    "CS",
-    "MATH",
-    "PHYSICS"
-  ];
+  String dropdownValue = "Choose category";
   @override
   Widget build(BuildContext context) {
+    List<String> categories = ["Choose category"];
+    categories += this.widget.userCategories;
+
+    //Todo: implement notifyBackend upon uploading file.
+    Future<void> notifyBackend(String filePath) async {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(widget.userUID)
+          .collection(dropdownValue)
+          .doc(fileName.text)
+          .set({"file_url": filePath});
+    }
+
     return Padding(
-      padding: const EdgeInsets.only(top:400.0),
+      padding: const EdgeInsets.only(top: 400.0),
       child: Card(
         margin: EdgeInsets.zero,
         borderOnForeground: true,
@@ -69,7 +92,7 @@ class _AddFileDialogState extends State<AddFileDialog> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(40,0,40,0),
+              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
               child: TextField(
                 maxLength: 12,
                 autofocus: true,
@@ -86,10 +109,10 @@ class _AddFileDialogState extends State<AddFileDialog> {
               onChanged: (String? newValue) {
                 setState(() {
                   dropdownValue = newValue!;
+                  print(newValue);
                 });
               },
-              items: categories
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: categories.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -97,58 +120,74 @@ class _AddFileDialogState extends State<AddFileDialog> {
               }).toList(),
             ),
             OutlinedButton(
-                onPressed: () async {
-                  FilePickerResult? result = await FilePicker.platform.pickFiles();
-                  if (result != null) {
-                    noteFile = File(result.files.single.path!);
-                  } else {
-                    // User canceled the picker
-                  }
-                },
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width-120,
-                    child: Column(
-                      children: const [
-                        Icon(Icons.upload_rounded,size: 120,),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("Upload"),
-                        )
-                      ],
-                    )
-                ),
+              onPressed: () async {
+                FilePickerResult? result =
+                    await FilePicker.platform.pickFiles();
+                if (result != null) {
+                  noteFile = File(result.files.single.path!);
+                } else {
+                  // User canceled the picker
+                }
+              },
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 120,
+                  child: Column(
+                    children: const [
+                      Icon(
+                        Icons.upload_rounded,
+                        size: 120,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Upload"),
+                      )
+                    ],
+                  )),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text("Cancel")
-                ),
+                    child: const Text("Cancel")),
                 TextButton(
-                    onPressed: (){
-                        if(noteFile==null||fileName.text==''){
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please confirm information")));
-                        }else {
-                          try{
-                            FirebaseStorage.instance.ref().child("UserPdf").child(
-                                widget.userUID).child(dropdownValue).child(fileName.text).putFile(
-                                noteFile)
-                            .then((_) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Success!"))))
-                            ;
-                          }catch(err){
-                            print(err);
-                            //Todo: Unhandled EXCEPTION
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Upload failed: "+err.toString())));
-                          }finally{
-                            Navigator.of(context).pop();
-                          }
+                    onPressed: () {
+                      if (noteFile == null ||
+                          fileName.text == '' ||
+                          dropdownValue == "Choose Cateory") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Please confirm information")));
+                      } else {
+                        String filePath = "UserPdf/" +
+                            widget.userUID +
+                            "/" +
+                            dropdownValue +
+                            "/" +
+                            fileName.text;
+                        try {
+                          FirebaseStorage.instance
+                              .ref()
+                              .child(filePath)
+                              .putFile(noteFile)
+                              .then((_) {
+                            notifyBackend(filePath);
+                          }).then((_) => ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                      SnackBar(content: Text("Success!"))));
+                        } catch (err) {
+                          print(err);
+                          //Todo: Unhandled EXCEPTION
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text("Upload failed: " + err.toString())));
+                        } finally {
+                          Navigator.of(context).pop();
                         }
-                      },
-                    child: const Text("Upload")
-                )
+                      }
+                    },
+                    child: const Text("Upload"))
               ],
             )
           ],

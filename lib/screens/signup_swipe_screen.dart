@@ -87,7 +87,7 @@ class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
           'major': majorField.text,
           'location': locationField.text,
           'avatar': avatarUrl,
-          'email': emailField.text,
+          'email': _currentUser!.email,
           'other': otherField.text,
         });
         print("User added to Firebase");
@@ -170,7 +170,6 @@ class _SignUpSwipeScreenState extends State<SignUpSwipeScreen> {
     }
     return null;
   }
-
 
   @override
   Widget build(BuildContext context) {

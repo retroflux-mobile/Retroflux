@@ -18,18 +18,27 @@ class NotesDisplay extends StatefulWidget {
 
 class _NotesDisplayState extends State<NotesDisplay> {
   String get categroy => widget.category;
-
+  String userUID = FirebaseAuth.instance.currentUser!.uid;
   Future<List<String>> RetriveNotes(String categroy) async {
     List<String> notes = [];
     QuerySnapshot notesSnapshot = await FirebaseFirestore.instance
         .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .doc(userUID)
         .collection(widget.category)
         .get();
     for (var element in notesSnapshot.docs) {
       notes.add(element.id);
     }
     return notes;
+  }
+
+  Future<String> getNotePath(String noteID) async {
+    DocumentSnapshot noteFile = await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(userUID + "/" + categroy + "/" + noteID)
+        .get();
+    String notePath = noteFile["file_url"];
+    return notePath;
   }
 
   @override
@@ -61,10 +70,9 @@ class _NotesDisplayState extends State<NotesDisplay> {
                                 color: Colors.blue,
                                 borderRadius: BorderRadius.circular(15)),
                             child: GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   pdfListData.addPdfInfo(PdfInfo(
-                                      path:
-                                          'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1Even.pdf?alt=media&token=a0d0454a-e5f7-4456-b4d8-d3dfe1e5ed22',
+                                      path: await getNotePath(notesList[index]),
                                       favoritePages: [1]));
                                   Navigator.pushNamed(
                                       context, HomePageScreen.routeName);

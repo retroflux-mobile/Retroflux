@@ -50,7 +50,7 @@ class _NotehubScreenState extends State<NotehubScreen> {
                   child: Container(
                     alignment: Alignment.center,
                     child: Stack(alignment: Alignment.center, children: [
-                      Icon(
+                      const Icon(
                         Icons.folder,
                         size: 120,
                         color: Colors.white,
