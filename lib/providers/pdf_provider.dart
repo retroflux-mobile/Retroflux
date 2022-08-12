@@ -1,7 +1,6 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:retroflux/models/pdf_info.dart';
 
@@ -23,16 +22,22 @@ class PdfProvider with ChangeNotifier {
   }
 
   Future<void> initPDFMessages() async {
-    //Get chat json file directory
     Directory fileDir = await getApplicationDocumentsDirectory();
     String cachePath = fileDir.path;
-    List<String> messages = [];
 
     if (_initialized) {
     } else {
-      for(PdfInfo i in _pdfList){
-        String localPath = i.path.substring(74);
-        print(localPath);
+      for (var i = 0; i < _pdfList.length; i++) {
+        // '?' not allowed in file system
+        String filename =
+            _pdfList[i].path.substring(74).replaceAll('?', '_') + '.pdf';
+        String fullPath = cachePath + filename;
+        if (!File(fullPath).existsSync()) {
+          var data = await http.get(Uri.parse(_pdfList[i].path));
+          var bytes = data.bodyBytes;
+          await File(fullPath).writeAsBytes(bytes);
+        }
+        _pdfList[i].path = fullPath;
       }
     }
   }

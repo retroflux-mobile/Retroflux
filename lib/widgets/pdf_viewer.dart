@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -92,8 +93,8 @@ class PdfViewerState extends State<PdfViewer> {
         child: Stack(
           children: [
             Scaffold(
-              body: SfPdfViewer.network(
-                widget.path,
+              body: SfPdfViewer.file(
+                File(widget.path),
                 scrollDirection: PdfScrollDirection.horizontal,
                 pageLayoutMode: PdfPageLayoutMode.single,
                 controller: widget.pdfViewerController,
