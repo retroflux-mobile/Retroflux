@@ -22,7 +22,15 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
     return FutureBuilder(
         future: pdfListData.initPDFMessages(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          return Center(child: Scroller(pdfList: pdfList));
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            } else {
+              return Center(child: Scroller(pdfList: pdfList));
+            }
+          } else {
+            return const CircularProgressIndicator();
+          }
         });
   }
 }
