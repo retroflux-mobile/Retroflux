@@ -74,7 +74,7 @@ class _NotesDisplayState extends State<NotesDisplay> {
                                   pdfListData.addPdfInfo(PdfInfo(
                                       path: await getNotePath(notesList[index]),
                                       favoritePages: [1]));
-                                  Navigator.pushNamed(
+                                  Navigator.pushReplacementNamed(
                                       context, HomePageScreen.routeName);
                                 },
                                 child: Text(notesList[index])),

@@ -45,8 +45,9 @@ class Chat with ChangeNotifier {
     bool chatJsonexist = await File("$filePath/chat_messages.json").exists();
 
     //load sample chat
-    //String sampleChat = await rootBundle.loadString("assets/sample_chat_messages.json");
-    //await File("$filePath/chat_messages.json").writeAsString(sampleChat);
+    String sampleChat =
+        await rootBundle.loadString("assets/sample_chat_messages.json");
+    await File("$filePath/chat_messages.json").writeAsString(sampleChat);
 
     // if chat data already initialized, do nothing
     if (initialized) {
