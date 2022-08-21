@@ -43,7 +43,7 @@ class _ScrollerState extends State<Scroller> {
         PdfViewerController pdfViewerController = PdfViewerController();
         PdfInfo pi = widget.pdfList[index];
         PdfViewer pv = PdfViewer(
-            path: pi.path,
+            path: pi.localPath,
             favoritePages: pi.favoritePages,
             pdfViewerController: pdfViewerController);
         return pv;
