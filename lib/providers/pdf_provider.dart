@@ -22,18 +22,4 @@ class PdfProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initPDFMessages() async {
-    //Get chat json file directory
-    Directory fileDir = await getApplicationDocumentsDirectory();
-    String cachePath = fileDir.path;
-    List<String> messages = [];
-
-    if (_initialized) {
-    } else {
-      for(PdfInfo i in _pdfList){
-        String localPath = i.path.substring(74);
-        print(localPath);
-      }
-    }
-  }
 }

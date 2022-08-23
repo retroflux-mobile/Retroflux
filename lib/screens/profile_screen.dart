@@ -78,9 +78,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "https://avatars.dicebear.com/api/adventurer-neutral/random.png";
   @override
   Widget build(BuildContext context) {
-    if (infoMap["avatar"] != null) {
-      avatar = infoMap["avatar"].toString();
-    }
+    // if (infoMap["avatar"] != null) {
+    //   avatar = infoMap["avatar"].toString();
+    // }
     return Container(
       decoration: const BoxDecoration(color: Colors.black),
       child: Column(

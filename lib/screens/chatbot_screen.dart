@@ -1,6 +1,6 @@
-import 'dart:convert';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:retroflux/providers/chat_message_provider.dart';
 import '../models/pdf_info.dart';
@@ -20,22 +20,36 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   bool initialed = false;
   final ScrollController _controller = ScrollController();
   TextEditingController _chatInputController = TextEditingController();
+  String currentUID = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
     final messageData = Provider.of<Chat>(context);
     return FutureBuilder(
-        future: messageData.getChatMessages(),
+        future: messageData.getChatMessages(currentUID),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           List<ChatMessage> messages = messageData.loadedMessages;
-          return SafeArea(
+          messages = List<ChatMessage>.from(messages.reversed);
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.black
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(height: MediaQuery.of(context).viewPadding.top,),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.orange
+                  ),
+                  child: Text("Say anything! :D",style: TextStyle(color: Colors.white,fontSize: 40),),
+                ),
                 Expanded(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.8,
                     width: MediaQuery.of(context).size.width,
                     child: ListView.builder(
+                      reverse: true,
                       itemCount: messages.length,
                       controller: _controller,
                       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
@@ -45,10 +59,13 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
                         child: TextField(
                           controller: _chatInputController,
                           decoration: const InputDecoration(
@@ -57,23 +74,23 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                           ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                        onPressed: () async {
-                          messageData
-                              .addMsg(ChatMessage(
-                                  contentString: _chatInputController.text,
-                                  isSender: true,
-                                  attachedFilePath: ""))
-                              .then((_) {
+                      IconButton(
+                          onPressed: () async {
+                            await messageData.addMsg(
+                                ChatMessage(
+                                    contentString: _chatInputController.text,
+                                    isSender: true,
+                                    attachedFilePath: ""),
+                                currentUID);
                             _controller.animateTo(
-                                _controller.position.maxScrollExtent,
-                                duration: const Duration(milliseconds: 1),
-                                curve: Curves.ease);
-                          });
-                        },
-                        icon: Icon(Icons.send))
-                  ],
+                              0,
+                              duration: Duration(milliseconds: 250),
+                              curve: Curves.easeInOutCubic,
+                            );
+                          },
+                          icon: Icon(Icons.send))
+                    ],
+                  ),
                 )
               ],
             ),
@@ -105,9 +122,12 @@ class chatMessageItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
-            Text(
-              message.contentString,
-            ),
+            message.contentString == "LOADING"
+                ? LoadingAnimationWidget.stretchedDots(
+                    color: Colors.white, size: 30)
+                : Text(
+                    message.contentString,
+                  ),
             message.attachedFilePath == ""
                 ? SizedBox()
                 : IconButton(
@@ -117,7 +137,10 @@ class chatMessageItem extends StatelessWidget {
                       Navigator.pushReplacementNamed(
                           context, HomePageScreen.routeName);
                     },
-                    icon: Icon(Icons.description),
+                    icon: Icon(
+                      Icons.description,
+                      size: 50,
+                    ),
                   )
           ],
         ),

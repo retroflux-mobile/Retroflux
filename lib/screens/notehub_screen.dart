@@ -12,7 +12,7 @@ class NotehubScreen extends StatefulWidget {
 }
 
 class _NotehubScreenState extends State<NotehubScreen> {
-  List<String> category = ["CS", "math", "physics"];
+  List<String> category = [];
 
   @override
   void initState() {

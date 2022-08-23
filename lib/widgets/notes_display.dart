@@ -54,33 +54,42 @@ class _NotesDisplayState extends State<NotesDisplay> {
           return Scaffold(
               appBar: AppBar(
                 title: Text(categroy),
+                backgroundColor: Colors.black87,
               ),
               body: snapshot.hasData
-                  ? GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3, childAspectRatio: 1.0),
-                      itemCount: notesList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: GestureDetector(
-                                onTap: () async {
-                                  pdfListData.addPdfInfo(PdfInfo(
-                                      path: await getNotePath(notesList[index]),
-                                      favoritePages: [1]));
-                                  Navigator.pushNamed(
-                                      context, HomePageScreen.routeName);
-                                },
-                                child: Text(notesList[index])),
-                          ),
-                        );
-                      })
+                  ? DecoratedBox(
+                      decoration: const BoxDecoration(
+                      color: Colors.black
+                  ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:20.0),
+                      child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3, childAspectRatio: 1.0),
+                          itemCount: notesList.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: GestureDetector(
+                                    onTap: () async {
+                                      pdfListData.addPdfInfo(PdfInfo(
+                                          path: await getNotePath(notesList[index]),
+                                          favoritePages: [1]));
+                                      Navigator.pushNamed(
+                                          context, HomePageScreen.routeName);
+                                    },
+                                    child: Text(notesList[index])),
+                              ),
+                            );
+                          }),
+                    ),
+                  )
                   : const Center(child: CircularProgressIndicator()));
         });
   }

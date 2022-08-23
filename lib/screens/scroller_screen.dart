@@ -19,10 +19,6 @@ class _ScrollerScreenState extends State<ScrollerScreen> {
   Widget build(BuildContext context) {
     final pdfListData = Provider.of<PdfProvider>(context);
     final pdfList = pdfListData.loadedPdfs;
-    return FutureBuilder(
-        future: pdfListData.initPDFMessages(),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          return Center(child: Scroller(pdfList: pdfList));
-        });
+    return Center(child: Scroller(pdfList: pdfList));
   }
 }
