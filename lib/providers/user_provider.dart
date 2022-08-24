@@ -22,7 +22,7 @@ class UserProvider with ChangeNotifier {
           location: data["location"],
           major: data["major"],
           name: data["name"],
-          other: data["other"],
+          other: data["other"]!=null?data["other"]:"",
           category:data["category"]
         );
       }

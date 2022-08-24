@@ -12,8 +12,7 @@ class NotehubScreen extends StatefulWidget {
 }
 
 class _NotehubScreenState extends State<NotehubScreen> {
-
-  List<String > category = ["CS","math","physics"];
+  List<String> category = [];
 
   @override
   void initState() {
@@ -30,39 +29,47 @@ class _NotehubScreenState extends State<NotehubScreen> {
       if (userInfo != null) {
         category = List<String>.from(userInfo.category);
         //for (var element in userInfo.category) {category.add(element.toString());}
-        setState(() {
-        });
+        setState(() {});
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1.0
-          ),
-          itemCount: category.length,
-          itemBuilder: (context,index){
-            return Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextButton(
-                    onPressed: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder:(context)=>NotesDisplay(category: category[index],)));
-                    },
-                    child: Text(category[index],style: TextStyle(color: Colors.white),)
-                ),
-              ),
-            );
-          }
-      )
+    return DecoratedBox(
+      decoration: BoxDecoration(color: Colors.black),
+      child: Padding(
+          padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, childAspectRatio: 1.0),
+              itemCount: category.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Stack(alignment: Alignment.center, children: [
+                      const Icon(
+                        Icons.folder,
+                        size: 120,
+                        color: Colors.white,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => NotesDisplay(
+                                      category: category[index],
+                                    )));
+                          },
+                          child: Text(
+                            category[index],
+                            style: TextStyle(color: Colors.black),
+                          )),
+                    ]),
+                  ),
+                );
+              })),
     );
   }
 }

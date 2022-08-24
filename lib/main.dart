@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:retroflux/providers/chat_provider.dart';
 import 'package:retroflux/providers/test_img_provider.dart';
 import 'package:retroflux/providers/user_provider.dart';
+import 'package:retroflux/providers/pdf_provider.dart';
 import 'package:retroflux/screens/addpage_screen.dart';
 import 'package:retroflux/screens/chatbot_screen.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
@@ -13,6 +14,7 @@ import 'package:retroflux/screens/profile_screen.dart';
 import 'package:retroflux/screens/scroller_screen.dart';
 import 'package:retroflux/tests/provider_test_screen.dart';
 import 'package:retroflux/tests/tests_screen.dart';
+import 'package:retroflux/widgets/notes_display.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -20,6 +22,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const MyApp());
 }
 
@@ -33,6 +36,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => TestImgs()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => PdfProvider()),
         ChangeNotifierProvider(create: (_) => Chat()),
       ],
       child: MaterialApp(
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
           // This is the theme of your application.
           primarySwatch: Colors.blue,
         ),
-        home: const HomePageScreen(),
+        home: const LoginMethodScreen(),
         routes: {
           AddPageScreen.routeName: (context) => const AddPageScreen(),
           ChatbotScreen.routeName: (context) => const ChatbotScreen(),
@@ -63,4 +67,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

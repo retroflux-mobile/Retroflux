@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:retroflux/models/pdf_info.dart';
+import 'package:provider/provider.dart';
+import 'package:retroflux/providers/pdf_provider.dart';
 
 import '../widgets/scroller.dart';
 
@@ -14,37 +17,20 @@ class ScrollerScreen extends StatefulWidget {
 class _ScrollerScreenState extends State<ScrollerScreen> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Scroller(
-        widgetList: [
-          [
-            const Image(
-              image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-            ),
-            const Image(
-              image: NetworkImage('https://flxt.tmsimg.com/assets/p12991665_b_v13_am.jpg'),
-            ),
-            ElevatedButton(
-              onPressed: () { },
-              child: const Text("normal"),
-            )
-          ],
-          [
-            IconButton(
-              icon: const Icon(Icons.thumb_up),
-              onPressed: () {},
-            ),
-            const TextField(
-              decoration: InputDecoration(
-                  labelText: "PWD",
-                  hintText: "PWD",
-                  prefixIcon: Icon(Icons.lock)
-              ),
-              obscureText: true,
-            ),
-          ]
-        ]
-      )
-    );
+    final pdfListData = Provider.of<PdfProvider>(context);
+    final pdfList = pdfListData.loadedPdfs;
+    return FutureBuilder(
+        future: pdfListData.initPDFMessages(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            } else {
+              return Center(child: Scroller(pdfList: pdfList));
+            }
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 }
