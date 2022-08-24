@@ -29,71 +29,77 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           List<ChatMessage> messages = messageData.loadedMessages;
           messages = List<ChatMessage>.from(messages.reversed);
-          return DecoratedBox(
-            decoration: BoxDecoration(
-              color: Colors.black
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: MediaQuery.of(context).viewPadding.top,),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.orange
-                  ),
-                  child: Text("Say anything! :D",style: TextStyle(color: Colors.white,fontSize: 40),),
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      reverse: true,
-                      itemCount: messages.length,
-                      controller: _controller,
-                      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-                        value: messages[i],
-                        child: chatMessageItem(message: messages[i]),
+          return Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom
+              ),
+              child: DecoratedBox(
+                decoration: const BoxDecoration(color: Colors.black),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).viewPadding.top),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(color: Colors.orange),
+                      child: const Text(
+                        "Say anything! :D",
+                        style: TextStyle(color: Colors.white, fontSize: 40),
                       ),
                     ),
-                  ),
-                ),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.white
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _chatInputController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Say something :D',
-                          ),
+                    Expanded(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                          reverse: true,
+                          itemCount: messages.length,
+                          controller: _controller,
+                          itemBuilder: (ctx, i) =>
+                              ChangeNotifierProvider.value(
+                                value: messages[i],
+                                child: chatMessageItem(message: messages[i]),
+                              ),
                         ),
                       ),
-                      IconButton(
-                          onPressed: () async {
-                            await messageData.addMsg(
-                                ChatMessage(
-                                    contentString: _chatInputController.text,
-                                    isSender: true,
-                                    attachedFilePath: ""),
-                                currentUID);
-                            _controller.animateTo(
-                              0,
-                              duration: Duration(milliseconds: 250),
-                              curve: Curves.easeInOutCubic,
-                            );
-                          },
-                          icon: Icon(Icons.send))
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                    DecoratedBox(
+                      decoration: const BoxDecoration(color: Colors.white),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _chatInputController,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: 'Say something :D',
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () async {
+                                await messageData.addMsg(
+                                    ChatMessage(
+                                        contentString: _chatInputController.text,
+                                        isSender: true,
+                                        attachedFilePath: "",
+                                        originalFileName: ""
+                                    ),
+                                    currentUID
+                                );
+                                _controller.animateTo(
+                                  0,
+                                  duration: Duration(milliseconds: 250),
+                                  curve: Curves.easeInOutCubic,
+                                );
+                              },
+                              icon: Icon(Icons.send))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
           );
         });
   }
@@ -115,7 +121,7 @@ class chatMessageItem extends StatelessWidget {
       alignment: message.isSender ? Alignment.topRight : Alignment.topLeft,
       child: Container(
         constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
+        BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: message.isSender ? Colors.grey : Colors.orange,
@@ -124,24 +130,30 @@ class chatMessageItem extends StatelessWidget {
           children: [
             message.contentString == "LOADING"
                 ? LoadingAnimationWidget.stretchedDots(
-                    color: Colors.white, size: 30)
+                color: Colors.white, size: 30)
                 : Text(
-                    message.contentString,
-                  ),
+              message.contentString,
+            ),
             message.attachedFilePath == ""
                 ? SizedBox()
-                : IconButton(
-                    onPressed: () async {
-                      pdfListData.addPdfInfo(PdfInfo(
-                          path: message.attachedFilePath, favoritePages: [1]));
-                      Navigator.pushReplacementNamed(
-                          context, HomePageScreen.routeName);
-                    },
-                    icon: Icon(
-                      Icons.description,
-                      size: 50,
-                    ),
-                  )
+                : TextButton.icon(
+                onPressed: () async {
+                  pdfListData.addPdfInfo(PdfInfo(
+                      path: message.attachedFilePath, favoritePages: [1]));
+                  Navigator.pushReplacementNamed(
+                      context, HomePageScreen.routeName);
+                },
+                icon: const Icon(
+                  Icons.description,
+                  size: 50,
+                  color: Colors.black,
+                ),
+                label: Text(
+                  message.originalFileName.isNotEmpty
+                      ? message.originalFileName
+                      : 'File',
+                  style: const TextStyle(color: Colors.black),
+                ))
           ],
         ),
       ),

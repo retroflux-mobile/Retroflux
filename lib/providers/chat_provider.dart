@@ -34,29 +34,29 @@ class Chat with ChangeNotifier {
   }
 
   void addTempLoadingMessage(){
-    _loadedMessages.add(ChatMessage(contentString: "LOADING", isSender: false, attachedFilePath: ""));
+    _loadedMessages.add(ChatMessage(contentString: "LOADING", isSender: false, attachedFilePath: "", originalFileName: ""));
     notifyListeners();
   }
 
   Future<void> messageBackend(ChatMessage item, String uid)async{
-      Response response = await Dio().post('http://10.0.0.229:60117/api/chatbot', data: {'user_id':uid, 'message': item.contentString});
-      List<dynamic> resDecode = response.data;
-      for(dynamic i in resDecode){
-        Map<String, dynamic> data = Map<String, dynamic>.from(i);
-        if(data.keys.contains("text")){
-          _loadedMessages.add(ChatMessage(contentString: data["text"], isSender: false, attachedFilePath: ""));
-        }else{
-          _loadedMessages.add(ChatMessage(contentString: "", isSender: false, attachedFilePath: i["attachment"]));
-        }
+    Response response = await Dio().post('http://10.0.0.229:60117/api/chatbot', data: {'user_id':uid, 'message': item.contentString});
+    List<dynamic> resDecode = response.data;
+    for(dynamic i in resDecode){
+      Map<String, dynamic> data = Map<String, dynamic>.from(i);
+      if(data.keys.contains("text")){
+        _loadedMessages.add(ChatMessage(contentString: data["text"], isSender: false, attachedFilePath: "", originalFileName: ""));
+      }else{
+        _loadedMessages.add(ChatMessage(contentString: "", isSender: false, attachedFilePath: i["attachment"], originalFileName: i['originalFileName']));
       }
-      popTempMessage();
-      // _loadedMessages.add(
-      //     ChatMessage(
-      //         contentString: "Chatbot is still under tunning, but frontend is prepared. Click the icon to test viewing notes",
-      //         isSender: false,
-      //         attachedFilePath: "https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1Odd.pdf?alt=media&token=a4ac896e-5698-4cb6-8507-054acec3a430")
-      // );
-      notifyListeners();
+    }
+    popTempMessage();
+    // _loadedMessages.add(
+    //     ChatMessage(
+    //         contentString: "Chatbot is still under tunning, but frontend is prepared. Click the icon to test viewing notes",
+    //         isSender: false,
+    //         attachedFilePath: "https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1Odd.pdf?alt=media&token=a4ac896e-5698-4cb6-8507-054acec3a430")
+    // );
+    notifyListeners();
   }
 
   Map<String, dynamic> toJson() {
@@ -65,7 +65,8 @@ class Chat with ChangeNotifier {
       messages.add({
         "contentString": msg.contentString,
         "isSender": msg.isSender,
-        "attachedFilePath": msg.attachedFilePath
+        "attachedFilePath": msg.attachedFilePath,
+        "originalFileName": msg.originalFileName,
       });
     }
     return {"messages": messages};
@@ -90,10 +91,14 @@ class Chat with ChangeNotifier {
         final file = await File("$filePath/chat_messages.json").readAsString();
         final json = await jsonDecode(file);
         for (Map<String, dynamic> messageJson in json["messages"]) {
-          messages.add(ChatMessage(
-              contentString: messageJson["contentString"],
-              isSender: messageJson["isSender"],
-              attachedFilePath: messageJson["attachedFilePath"]));
+          messages.add(
+            ChatMessage(
+                contentString: messageJson["contentString"],
+                isSender: messageJson["isSender"],
+                attachedFilePath: messageJson["attachedFilePath"],
+                originalFileName: messageJson.containsKey("originalFileName") ? messageJson["originalFileName"] : ""
+            ),
+          );
         }
       } else {
         await File("$filePath/chat_messages.json").create();

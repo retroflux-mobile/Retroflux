@@ -4,11 +4,13 @@ class ChatMessage with ChangeNotifier{
   final String contentString;
   final bool isSender;
   final String attachedFilePath;
+  final String originalFileName;
 
   ChatMessage({
     required this.contentString,
     required this.isSender,
-    required this.attachedFilePath
+    required this.attachedFilePath,
+    required this.originalFileName
   });
 
 }
