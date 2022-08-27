@@ -96,7 +96,7 @@ class _AddFileDialogState extends State<AddFileDialog> {
       await reference.set({"file_url": fileLink})
           .then((_){print("Users/${widget.userUID}/$dropdownValue/${fileName.text}");})
           .then((_){
-            dio.post('http://73.52.25.22:60117/api/process_pdf',
+            dio.post('http://10.0.0.229:60117/api/process_pdf',
                 data: {"collection_path":"Users/${widget.userUID}/$dropdownValue/${fileName.text}"});
           });
 

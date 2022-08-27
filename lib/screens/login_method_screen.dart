@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:retroflux/firebase_options.dart';
 import 'package:retroflux/screens/homepage_screen.dart';
 import 'package:retroflux/screens/signup_swipe_screen.dart';
 
@@ -15,7 +16,6 @@ class LoginMethodScreen extends StatelessWidget {
         .collection("Users")
         .doc(currentUser.uid)
         .get();
-    print(userDoc.exists);
     return false;
   }
 
@@ -31,16 +31,21 @@ class LoginMethodScreen extends StatelessWidget {
           return SignInScreen(
               headerBuilder: (context, constraints, shrinkOffset) {
                 return Padding(
-                  padding: const EdgeInsets.all(20).copyWith(top: 40),
-                  child: Icon(
-                    Icons.sentiment_very_satisfied,
-                    color: Colors.blue,
-                    size: constraints.maxWidth / 4 * (1 - shrinkOffset),
+                  padding: EdgeInsets.only(top: 20),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    child: Image.asset(
+                      "assets/rficon.png"
+                    ),
                   ),
                 );
               },
               providerConfigs: const [
                 EmailProviderConfiguration(),
+                // GoogleProviderConfiguration(
+                //   clientId: googleWebID,
+                // ),
               ]);
         } else {
           return FutureBuilder(
