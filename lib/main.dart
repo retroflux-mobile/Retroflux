@@ -14,7 +14,6 @@ import 'package:retroflux/screens/profile_screen.dart';
 import 'package:retroflux/screens/scroller_screen.dart';
 import 'package:retroflux/tests/provider_test_screen.dart';
 import 'package:retroflux/tests/tests_screen.dart';
-import 'package:retroflux/widgets/notes_display.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {

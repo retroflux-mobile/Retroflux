@@ -1,8 +1,12 @@
+import 'dart:ffi';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:retroflux/models/pdf_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PdfProvider with ChangeNotifier {
   final List<PdfInfo> _pdfList = [
@@ -20,14 +24,55 @@ class PdfProvider with ChangeNotifier {
     return [..._pdfList];
   }
 
+  Future<bool> checkRankUpdate() async {
+    String uid = await FirebaseAuth.instance.currentUser!.uid;
+    bool updated =  await FirebaseFirestore.instance.collection("Users").doc(uid)
+        .get().then((data) {
+         return data["feedUpdated"];
+    });
+    print("feedUpdate: "+updated.toString());
+    return updated;
+  }
+
+  //todo: update pdf list based on rank in firebase
+  Future<void> rerank() async {
+    String uid = await FirebaseAuth.instance.currentUser!.uid;
+    List<dynamic> newRank = await FirebaseFirestore.instance.collection("Users").doc(uid)
+        .get().then((data) {
+      return data["feedRank"];
+    });
+    List<String> newFeedFiles = List<String>.from(newRank);
+    print("getting new file links");
+    _pdfList.clear();
+    for(String filePath in newFeedFiles){
+      String fileLink = await getDownloadLinkFromPath(filePath);
+      _pdfList.add(PdfInfo(path: fileLink,favoritePages: []));
+      print("one file added to feed");
+    }
+    notifyListeners();
+  }
+  Future<String> getDownloadLinkFromPath(String pdfPath) async {
+    String downloadLink = await FirebaseFirestore.instance.doc(pdfPath).get().then((value) => value["file_url"]);
+    return downloadLink;
+  }
+
+
   void addPdfInfo(PdfInfo pdfInfo) {
     _pdfList.insert(0, pdfInfo);
     notifyListeners();
   }
 
   Future<void> initPDFMessages() async {
+    String uid = await FirebaseAuth.instance.currentUser!.uid;
     Directory fileDir = await getApplicationDocumentsDirectory();
     String cachePath = fileDir.path;
+    bool neeedToUpdate = await checkRankUpdate();
+    if(neeedToUpdate){
+      await FirebaseFirestore.instance.collection("Users").doc(uid)
+          .update({"feedUpdated":false});
+      rerank();
+    };
+
     for (var i = 0; i < _pdfList.length; i++) {
       // '?' not allowed in file system
       String filename =
