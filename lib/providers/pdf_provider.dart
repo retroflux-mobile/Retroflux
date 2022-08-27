@@ -24,7 +24,9 @@ class PdfProvider with ChangeNotifier {
     return [..._pdfList];
   }
 
+
   Future<bool> checkRankUpdate() async {
+    //Check the "feedUpdated" field of user's doc, if true, call rerank function
     String uid = await FirebaseAuth.instance.currentUser!.uid;
     bool updated =  await FirebaseFirestore.instance.collection("Users").doc(uid)
         .get().then((data) {
@@ -34,8 +36,9 @@ class PdfProvider with ChangeNotifier {
     return updated;
   }
 
-  //todo: update pdf list based on rank in firebase
+
   Future<void> rerank() async {
+    //clear all pdf files in scroller and rebuild the list based on the feedRank in user's doc
     String uid = await FirebaseAuth.instance.currentUser!.uid;
     List<dynamic> newRank = await FirebaseFirestore.instance.collection("Users").doc(uid)
         .get().then((data) {
@@ -51,7 +54,9 @@ class PdfProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
   Future<String> getDownloadLinkFromPath(String pdfPath) async {
+    //get a file's download link from its path in firebase
     String downloadLink = await FirebaseFirestore.instance.doc(pdfPath).get().then((value) => value["file_url"]);
     return downloadLink;
   }
