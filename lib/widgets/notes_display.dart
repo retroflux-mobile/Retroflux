@@ -73,9 +73,7 @@ class _NotesDisplayState extends State<NotesDisplay> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                 alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15)),
+
                                 child: GestureDetector(
                                     onTap: () async {
                                       pdfListData.addPdfInfo(PdfInfo(
@@ -84,7 +82,13 @@ class _NotesDisplayState extends State<NotesDisplay> {
                                       Navigator.pushNamed(
                                           context, HomePageScreen.routeName);
                                     },
-                                    child: Text(notesList[index])),
+                                    child: Column(
+                                        children:[
+                                          Icon(Icons.insert_drive_file,color: Colors.white,size: 70,),
+                                          Text(notesList[index],style: TextStyle(color: Colors.white),)
+                                      ]
+                                    )
+                                ),
                               ),
                             );
                           }),

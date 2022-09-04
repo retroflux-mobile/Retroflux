@@ -70,6 +70,7 @@ class _AddFileDialogState extends State<AddFileDialog> {
   var noteFile;
   String dropdownValue = "Choose category";
   late ScaffoldMessengerState _scaffoldMessenger;
+  bool fileUploaded = false;
 
   @override
   void didChangeDependencies() {
@@ -82,8 +83,6 @@ class _AddFileDialogState extends State<AddFileDialog> {
   Widget build(BuildContext context) {
     List<String> categories = ["Choose category"];
     categories += this.widget.userCategories;
-
-    //Todo: implement notifyBackend upon uploading file.
 
     Future<void> notifyBackend(String fileLink) async {
       var dio = Dio();
@@ -102,118 +101,136 @@ class _AddFileDialogState extends State<AddFileDialog> {
 
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 400.0),
-      child: Card(
-        margin: EdgeInsets.zero,
-        borderOnForeground: true,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: TextField(
-                maxLength: 12,
-                autofocus: true,
-                controller: fileName,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter File Name Here',
+    return StatefulBuilder(
+        builder: (context, setState) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 400.0),
+            child: Card(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                      child: TextField(
+                        maxLength: 12,
+                        autofocus: true,
+                        controller: fileName,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter File Name Here',
+                        ),
+                      ),
+                    ),
+                    DropdownButton(
+                      hint: const Text("Choose Cateory"),
+                      value: dropdownValue,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownValue = newValue!;
+                          print(newValue);
+                        });
+                      },
+                      items: categories.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    OutlinedButton(
+                      onPressed: () async {
+                        FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                        if (result != null) {
+                          setState(() {
+                            fileUploaded = true;
+                          });
+                          noteFile = File(result.files.single.path!);
+                        } else {
+                          setState((){
+                            fileUploaded = false;
+                          });
+                          // User canceled the picker
+                        }
+                      },
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 120,
+                          child: Column(
+                            children: [
+                              fileUploaded?
+                              Icon(
+                                Icons.file_open_rounded,
+                                size: 120,
+                              )
+                                  :
+                              Icon(
+                                Icons.upload_rounded,
+                                size: 120,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: fileUploaded?Text("File selected!")
+                                :Text("Select File Here")
+                                ,
+                              )
+                            ],
+                          )),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Cancel")),
+                        TextButton(
+                            onPressed: () {
+                              if (noteFile == null ||
+                                  fileName.text == '' ||
+                                  dropdownValue == "Choose Cateory") {
+                                _scaffoldMessenger.showSnackBar(SnackBar(
+                                    content: Text("Please confirm information")));
+                              } else {
+                                String filePath = "UserPdf/" +
+                                    widget.userUID +
+                                    "/" +
+                                    dropdownValue +
+                                    "/" +
+                                    fileName.text;
+                                try {
+                                  FirebaseStorage.instance
+                                      .ref()
+                                      .child(filePath)
+                                      .putFile(noteFile)
+                                      .then((_) async {
+                                    notifyBackend(await FirebaseStorage.instance
+                                        .ref()
+                                        .child(filePath).getDownloadURL());
+                                  }).then((_) => _scaffoldMessenger
+                                      .showSnackBar(
+                                      SnackBar(content: Text("Success!"))));
+                                } catch (err) {
+                                  print(err);
+                                  //Todo: Unhandled EXCEPTION
+                                  _scaffoldMessenger.showSnackBar(SnackBar(
+                                      content:
+                                      Text("Upload failed: " + err.toString())));
+                                } finally {
+                                  Navigator.of(context).pop();
+                                }
+                              }
+                            },
+                            child: const Text("Upload"))
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),
-            DropdownButton(
-              hint: const Text("Choose Cateory"),
-              value: dropdownValue,
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                  print(newValue);
-                });
-              },
-              items: categories.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            OutlinedButton(
-              onPressed: () async {
-                FilePickerResult? result =
-                    await FilePicker.platform.pickFiles();
-                if (result != null) {
-                  noteFile = File(result.files.single.path!);
-                } else {
-                  // User canceled the picker
-                }
-              },
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 120,
-                  child: Column(
-                    children: const [
-                      Icon(
-                        Icons.upload_rounded,
-                        size: 120,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Upload"),
-                      )
-                    ],
-                  )),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Cancel")),
-                TextButton(
-                    onPressed: () {
-                      if (noteFile == null ||
-                          fileName.text == '' ||
-                          dropdownValue == "Choose Cateory") {
-                        _scaffoldMessenger.showSnackBar(SnackBar(
-                            content: Text("Please confirm information")));
-                      } else {
-                        String filePath = "UserPdf/" +
-                            widget.userUID +
-                            "/" +
-                            dropdownValue +
-                            "/" +
-                            fileName.text;
-                        try {
-                          FirebaseStorage.instance
-                              .ref()
-                              .child(filePath)
-                              .putFile(noteFile)
-                              .then((_) async {
-                            notifyBackend(await FirebaseStorage.instance
-                                .ref()
-                                .child(filePath).getDownloadURL());
-                          }).then((_) => _scaffoldMessenger
-                                  .showSnackBar(
-                                      SnackBar(content: Text("Success!"))));
-                        } catch (err) {
-                          print(err);
-                          //Todo: Unhandled EXCEPTION
-                          _scaffoldMessenger.showSnackBar(SnackBar(
-                              content:
-                                  Text("Upload failed: " + err.toString())));
-                        } finally {
-                          Navigator.of(context).pop();
-                        }
-                      }
-                    },
-                    child: const Text("Upload"))
-              ],
-            )
-          ],
-        ),
-      ),
+          );
+        },
     );
   }
 }

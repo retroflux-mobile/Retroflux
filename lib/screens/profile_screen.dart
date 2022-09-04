@@ -99,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Center(
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(avatar),
-                        radius: 60,
+                        radius: 50,
                       ),
                     ),
                     Align(
@@ -185,29 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: TabBarView(
                         children: [
                           UserInfoPanel(infoMap: infoMap),
-                          ListView(
-                            children: [
-                              for (var key in fakeStat.keys)
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ListTile(
-                                    title: Text(
-                                      key,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    trailing: Text(
-                                      fakeStat[key].toString(),
-                                      style: TextStyle(
-                                          color: Colors.orange,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
+                          StatTab(fakeStat: fakeStat,),
                           SettingsTab(settingsRoutes: settingsRoutes)
                         ],
                       ),
@@ -316,6 +294,47 @@ class UserInfoPanel extends StatelessWidget {
                 child: const Center(child: Text('Edit'))),
           ),
         )
+      ],
+    );
+  }
+}
+
+
+
+class StatTab extends StatelessWidget {
+  const StatTab({
+    Key? key, this.fakeStat,
+  }) : super(key: key);
+
+  final fakeStat;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Image.asset("assets/sample_chart.png"),
+        ),
+        for (var key in fakeStat.keys)
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ListTile(
+              title: Text(
+                key,
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              trailing: Text(
+                fakeStat[key].toString(),
+                style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
       ],
     );
   }

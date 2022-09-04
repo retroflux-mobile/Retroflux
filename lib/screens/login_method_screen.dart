@@ -33,10 +33,10 @@ class LoginMethodScreen extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Container(
-                    height: 100,
-                    width: 100,
+                    height: 200,
+                    width: 200,
                     child: Image.asset(
-                      "assets/rficon.png"
+                      "assets/rficon.png",
                     ),
                   ),
                 );
@@ -48,18 +48,19 @@ class LoginMethodScreen extends StatelessWidget {
                 // ),
               ]);
         } else {
-          return FutureBuilder(
-              future: checkIfNewUser(snapshot.data!),
-              builder: (context, boolSnapshot) {
-                if (boolSnapshot.connectionState == ConnectionState.done) {
-                  bool checkNew = boolSnapshot.data! as bool;
-                  return checkNew
-                      ? const SignUpSwipeScreen()
-                      : const HomePageScreen();
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              });
+            return HomePageScreen();
+          // FutureBuilder(
+          //     future: checkIfNewUser(snapshot.data!),
+          //     builder: (context, boolSnapshot) {
+          //       if (boolSnapshot.connectionState == ConnectionState.done) {
+          //         bool checkNew = boolSnapshot.data! as bool;
+          //         return checkNew
+          //             ? const SignUpSwipeScreen()
+          //             : const HomePageScreen();
+          //       } else {
+          //         return const Center(child: CircularProgressIndicator());
+          //       }
+          //     });
         }
       },
     );

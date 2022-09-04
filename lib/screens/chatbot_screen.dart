@@ -31,7 +31,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           messages = List<ChatMessage>.from(messages.reversed);
           return DecoratedBox(
             decoration: BoxDecoration(
-              color: Colors.black
+              color: Colors.black87
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -39,59 +39,74 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 SizedBox(height: MediaQuery.of(context).viewPadding.top,),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.orange
-                  ),
-                  child: Text("Say anything! :D",style: TextStyle(color: Colors.white,fontSize: 40),),
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      reverse: true,
-                      itemCount: messages.length,
-                      controller: _controller,
-                      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-                        value: messages[i],
-                        child: chatMessageItem(message: messages[i]),
-                      ),
-                    ),
-                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.smart_toy, color: Colors.white,size: 50,),
+                      Text("  ChatBot",style: TextStyle(color: Colors.white,fontSize:20,fontWeight: FontWeight.bold),)
+                    ],
+                  )
                 ),
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Colors.white
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(51)
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _chatInputController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Say something :D',
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.78,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            reverse: true,
+                            itemCount: messages.length,
+                            controller: _controller,
+                            itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+                              value: messages[i],
+                              child: chatMessageItem(message: messages[i]),
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                          onPressed: () async {
-                            await messageData.addMsg(
-                                ChatMessage(
-                                    contentString: _chatInputController.text,
-                                    isSender: true,
-                                    attachedFilePath: ""),
-                                currentUID);
-                            _controller.animateTo(
-                              0,
-                              duration: Duration(milliseconds: 250),
-                              curve: Curves.easeInOutCubic,
-                            );
-                          },
-                          icon: Icon(Icons.send))
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _chatInputController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                        borderSide: BorderSide(color: Colors.black87)
+                                    ),
+                                    hintText: 'Say something :D',
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    await messageData.addMsg(
+                                        ChatMessage(
+                                            contentString: _chatInputController.text,
+                                            isSender: true,
+                                            attachedFilePath: ""),
+                                        currentUID);
+                                    _controller.animateTo(
+                                      0,
+                                      duration: Duration(milliseconds: 250),
+                                      curve: Curves.easeInOutCubic,
+                                    );
+                                    _chatInputController.clear();
+                                  },
+                                  icon: Icon(Icons.send))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           );

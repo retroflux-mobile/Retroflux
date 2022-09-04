@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:retroflux/providers/chat_message_provider.dart';
 
 class Chat with ChangeNotifier {
-  List<ChatMessage> _loadedMessages = [];
+  List<ChatMessage> _loadedMessages = [
+  ];
   bool initialized = false;
 
   List<ChatMessage> get loadedMessages {
@@ -39,7 +41,7 @@ class Chat with ChangeNotifier {
   }
 
   Future<void> messageBackend(ChatMessage item, String uid)async{
-      Response response = await Dio().post('http://10.0.0.229:60117/api/chatbot', data: {'user_id':uid, 'message': item.contentString});
+      Response response = await Dio().post('http://73.52.25.22:60117/api/chatbot', data: {'user_id':uid, 'message': item.contentString});
       List<dynamic> resDecode = response.data;
       for(dynamic i in resDecode){
         Map<String, dynamic> data = Map<String, dynamic>.from(i);

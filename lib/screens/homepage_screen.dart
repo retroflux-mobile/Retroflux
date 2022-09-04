@@ -1,13 +1,13 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:retroflux/screens/addpage_screen.dart';
 import 'package:retroflux/screens/chatbot_screen.dart';
 import 'package:retroflux/screens/notehub_screen.dart';
 import 'package:retroflux/screens/profile_screen.dart';
 import 'package:retroflux/screens/scroller_screen.dart';
-import 'package:retroflux/tests/tests_screen.dart';
 
-import '../style_guide.dart';
 
 class HomePageScreen extends StatefulWidget {
   static const String routeName = '/homepage';
@@ -28,6 +28,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   ];
 
   int _bottomNavBarIndex = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,15 +76,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.bug_report),
-        onPressed: () {
-          Navigator.pushNamed(context, '/TestsScreen');
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.bug_report),
+      //   onPressed: () {
+      //     Navigator.pushNamed(context, '/TestsScreen');
+      //   },
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       resizeToAvoidBottomInset: false,
     );
   }
 }
+
 
