@@ -44,7 +44,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           TabItem(
             icon: Icon(Icons.home,color: Colors.white,),
             activeIcon:Icon(Icons.home,color: Colors.orange,),
-            title: 'Scroller',
+            title: 'NoteFeed',
           ),
           TabItem(
             icon: Icon(Icons.menu_book,color: Colors.white,),

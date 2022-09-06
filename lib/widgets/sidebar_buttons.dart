@@ -42,8 +42,7 @@ class SidebarButtons extends StatelessWidget {
             pdfController: pdfController,
           ),
           _IconButton(
-            icon: const IconToText(Icons.comment, size: 36),
-            text: '',
+            icon: const IconToText(Icons.comment, size: 36,color: Colors.orange,),
             onTap: onComment,
           ),
           SpeedModeIcon(isSpeedMode: isSpeedMode, onSpeedMode: onSpeedMode),
@@ -84,7 +83,7 @@ class FavoriteIconState extends State<FavoriteIcon> {
       icon: IconToText(
         Icons.favorite,
         size: 40,
-        color: widget.isFavorite ? Colors.red : null,
+        color: widget.isFavorite ? Colors.red : Colors.amber,
       ),
       text: '',
       onTap: () => {widget.onFavorite()},
@@ -112,7 +111,7 @@ class SpeedModeIconState extends State<SpeedModeIcon> {
       icon: IconToText(
         Icons.speed,
         size: 40,
-        color: widget.isSpeedMode ? Colors.blue : null,
+        color: widget.isSpeedMode ? Colors.blue : Colors.amber,
       ),
       text: '',
       onTap: () => {widget.onSpeedMode()},
@@ -133,6 +132,7 @@ class IconToText extends StatelessWidget {
     this.size,
     this.color,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -179,7 +179,7 @@ class _IconButton extends StatelessWidget {
         ),
         Container(height: 2),
         Text(
-          text ?? '??',
+          text ?? '',
           style: const TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 12,

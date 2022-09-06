@@ -43,17 +43,20 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.smart_toy, color: Colors.white,size: 50,),
-                      Text("  ChatBot",style: TextStyle(color: Colors.white,fontSize:20,fontWeight: FontWeight.bold),)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("  ChatBot",style: TextStyle(color: Colors.white,fontSize:30,fontWeight: FontWeight.bold),),
+                      )
                     ],
                   )
                 ),
                 DecoratedBox(
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(51)
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(55)
                   ),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.78,
+                    height: MediaQuery.of(context).size.height * 0.846,
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
@@ -73,18 +76,25 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                           child: Row(
                             children: [
                               Expanded(
-                                child: TextField(
-                                  controller: _chatInputController,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide(color: Colors.black87)
+                                child: DecoratedBox(
+                                  decoration:BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(30)
+                                  ),
+                                  child: TextField(
+                                    controller: _chatInputController,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                          borderSide: BorderSide(color: Colors.black87)
+                                      ),
+                                      hintText: 'Say something :D',
                                     ),
-                                    hintText: 'Say something :D',
                                   ),
                                 ),
                               ),
                               IconButton(
+                                color: Colors.white,
                                   onPressed: () async {
                                     await messageData.addMsg(
                                         ChatMessage(

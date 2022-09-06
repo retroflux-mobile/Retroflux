@@ -7,33 +7,23 @@
     },
     {
       "isSender": false,
-      "contentString": "Are you loking for note about HTML?",
+      "contentString": "Are you loking for note about CSS?",
       "attachedFilePath": ""
     },
     {
       "isSender": false,
-      "contentString": "This is ",
-      "attachedFilePath": "https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1Even.pdf?alt=media&token=a0d0454a-e5f7-4456-b4d8-d3dfe1e5ed22"
-    },
-    {
-      "isSender": false,
-      "contentString": "Sorry we no longer use Deno. Bun is the new stuff people care.wwwwwwwwwwwwahjdvaiuvbayuvbpiiehrbgvqhvyuqwegqfvcabiujefbaiudgvbauwpgeqqaoiuwergabfpisdbviaugrpf9qbucpiwuaghbiao",
-      "attachedFilePath": ""
+      "contentString": "This is the note about CSS",
+      "attachedFilePath": "https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/UserPdf%2FONsTfC51iiRNRcgkhHiYIModAoh1%2FCSS%2FHow%20CSS%20work?alt=media&token=3d1ae03b-709a-4cd0-9a66-944e0778439b"
     },
     {
       "isSender": true,
-      "contentString": "So, may I have some Bun?",
+      "contentString": "What's the note I should review now",
       "attachedFilePath": ""
     },
     {
       "isSender": false,
-      "contentString": "Searching for closet Chinese restaurant around you",
-      "attachedFilePath": ""
-    },
-    {
-      "isSender": false,
-      "contentString": "Here's the bun",
-      "attachedFilePath": "https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/Ch7.pdf?alt=media&token=0f257579-b3a2-44a8-85ab-920a43d06ade"
+      "contentString": "The chatbot think it's time to review HTML",
+      "attachedFilePath": "https://storage.googleapis.com/retroflux-cf1ae.appspot.com/app/local/c1ccadbb-7ea2-4ee4-9b94-ce5400bfb40a23.pdf"
     }
   ]
 }

@@ -41,7 +41,7 @@ class Chat with ChangeNotifier {
   }
 
   Future<void> messageBackend(ChatMessage item, String uid)async{
-      Response response = await Dio().post('http://73.52.25.22:60117/api/chatbot', data: {'user_id':uid, 'message': item.contentString});
+      Response response = await Dio().post('http://73.52.25.22:5000/api/chatbot', data: {'user_id':uid, 'message': item.contentString});
       List<dynamic> resDecode = response.data;
       for(dynamic i in resDecode){
         Map<String, dynamic> data = Map<String, dynamic>.from(i);
@@ -83,7 +83,8 @@ class Chat with ChangeNotifier {
     bool chatJsonexist = await File("$filePath/chat_messages.json").exists();
 
     //load sample chat
-
+    String sampleChat = await rootBundle.loadString("assets/sample_chat_messages.json");
+    await File("$filePath/chat_messages.json").writeAsString(sampleChat);
     // if chat data already initialized, do nothing
     if (initialized) {
     } else {

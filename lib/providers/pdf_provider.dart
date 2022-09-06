@@ -10,13 +10,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 class PdfProvider with ChangeNotifier {
   final List<PdfInfo> _pdfList = [
     PdfInfo(
-        path:
-            'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003',
-        favoritePages: [1, 3, 5]),
+        path: 'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003',
+        favoritePages: [1, 3, 5],
+        comment:"I actually have no idea what this note is talking about"
+    ),
     PdfInfo(
-        path:
-            'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003',
-        favoritePages: [1, 3, 5]),
+        path: 'https://firebasestorage.googleapis.com/v0/b/retroflux-cf1ae.appspot.com/o/ch1.pdf?alt=media&token=87ae4400-08fb-42d4-bbe8-803329da6003',
+        favoritePages: [1, 3, 5],
+        comment: "and also this one"
+    ),
   ];
 
   List<PdfInfo> get loadedPdfs {
